@@ -61,5 +61,16 @@
         }
       ]
     }
+  ],
+  "id": "./",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "dir": "ltr",
+  "categories": [
+    "lifestyle",
+    "education",
+    "productivity"
   ]
 }

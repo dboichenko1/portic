@@ -197,8 +197,8 @@ textarea{width:100%;font:inherit;color:inherit;resize:none;overflow:hidden;line-
 
 /* tab bar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--paper);border-top:1px solid var(--rule);padding-bottom:env(safe-area-inset-bottom,0px)}
-.tabbar-inner{max-width:620px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1.35fr 1fr 1fr}
-.tab{padding:10px 0 12px;font-size:clamp(10.5px,3.1vw,12px);color:var(--stone);display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;overflow:hidden}
+.tabbar-inner{max-width:620px;margin:0 auto;display:flex;justify-content:space-between}
+.tab{flex:1 1 auto;padding:10px 3px 12px;font-size:clamp(9.5px,3.05vw,12px);color:var(--stone);display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;overflow:hidden}
 .tab span{white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .tab svg{width:22px;height:22px}
 .tab[aria-current="page"]{color:var(--ink)}
@@ -305,8 +305,216 @@ textarea{width:100%;font:inherit;color:inherit;resize:none;overflow:hidden;line-
 .cut-top label{font-size:16px;color:var(--text)}
 .cut-top b{font-weight:600;color:var(--ink)}
 .cut input{display:block;width:100%;accent-color:var(--ink);height:28px;margin:8px 0 0}
+/* library */
+.lib-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:28px}
+.lib-busy{font-size:15px;color:var(--stone)}
+.continue{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--rule);border-radius:22px;padding:16px 18px;margin-bottom:30px}
+.continue .c-k{display:block;font-size:14px;color:var(--stone)}
+.continue .c-t{display:block;font-family:var(--display);font-size:clamp(23px,6.6vw,28px);color:var(--ink);line-height:1.15;margin-top:4px;overflow-wrap:anywhere}
+.continue .c-a{display:block;font-size:15px;color:var(--stone);margin-top:2px}
+.pbar{display:block;height:5px;border-radius:3px;background:var(--rule);overflow:hidden;margin:12px 0 6px}
+.pbar i{display:block;height:100%;background:var(--ink);border-radius:3px}
+.c-p{font-size:13px;color:var(--stone)}
+.book{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:13px 0;border-top:1px solid var(--rule)}
+.book:last-child{border-bottom:1px solid var(--rule)}
+.book-open{display:block;text-align:left;min-width:0}
+.book-t{display:block;font-weight:600;color:var(--ink);font-size:16px;line-height:1.35;overflow-wrap:anywhere}
+.book-m{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--stone);margin-top:3px}
+.tag{display:inline-block;font-size:11px;letter-spacing:.04em;border:1px solid var(--rule);border-radius:6px;padding:0 5px;line-height:1.6;color:var(--text)}
+.book-del{color:var(--stone);font-size:15px;padding:6px 4px;white-space:nowrap}
+/* dictionary sheet */
+.dsearch{width:100%;font:inherit;font-size:16px;color:var(--ink);background:transparent;border:1px solid var(--rule);border-radius:99px;padding:9px 14px;margin:6px 0 12px}
+.dword{border-top:1px solid var(--rule)}
+.dword:last-child{border-bottom:1px solid var(--rule)}
+.dword-head{display:block;width:100%;text-align:left;padding:12px 0}
+.dword-t{font-weight:600;color:var(--ink);font-size:17px;overflow-wrap:anywhere}
+.dword-ph{color:var(--stone);font-size:14px;margin-left:6px}
+.dword-tr{display:block;font-size:16px;color:var(--text);margin-top:1px;overflow-wrap:anywhere}
+.dword-cx{display:block;font-size:14px;font-style:italic;color:var(--stone);margin-top:3px;overflow-wrap:anywhere}
+.dword-body{padding:0 0 14px}
+.dfield{display:block;font-size:14px;color:var(--stone);margin:8px 0 4px}
+.dinput{width:100%;font:inherit;font-size:16px;color:var(--ink);background:transparent;border:1px solid var(--rule);border-radius:12px;padding:8px 12px}
+.drow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+
+/* reader */
+#reader:empty{display:none}
+.reader{position:fixed;inset:0;z-index:50;background:var(--r-bg);color:var(--r-fg);--r-pad:24px;--r-size:19px;--r-lh:1.65;--r-font:'Literata',Georgia,serif}
+.rt-light{--r-bg:#FBFAF7;--r-fg:#1F1E1B;--r-muted:#6E6C66;--r-line:#E3E1DA;--r-accent:#6E2B3A;--r-sel:rgba(110,43,58,.16);--r-bar:rgba(251,250,247,.95);color-scheme:light}
+.rt-sepia{--r-bg:#F4ECD8;--r-fg:#4A3A28;--r-muted:#7E6A50;--r-line:#E0D2B4;--r-accent:#8A4B2A;--r-sel:rgba(138,75,42,.18);--r-bar:rgba(244,236,216,.95);color-scheme:light}
+.rt-gray{--r-bg:#4A4A4D;--r-fg:#E4E3DF;--r-muted:#B4B3AD;--r-line:#5E5E62;--r-accent:#F0B9C2;--r-sel:rgba(240,185,194,.25);--r-bar:rgba(74,74,77,.95);color-scheme:dark}
+.rt-night{--r-bg:#1B1A18;--r-fg:#CFC8BA;--r-muted:#918B7F;--r-line:#302E2A;--r-accent:#D9A06A;--r-sel:rgba(217,160,106,.22);--r-bar:rgba(27,26,24,.95);color-scheme:dark}
+.rt-black{--r-bg:#000000;--r-fg:#BDBAB2;--r-muted:#86837C;--r-line:#232322;--r-accent:#D9A06A;--r-sel:rgba(217,160,106,.22);--r-bar:rgba(0,0,0,.94);color-scheme:dark}
+.rscroll{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(64px + env(safe-area-inset-top,0px)) 0 calc(84px + env(safe-area-inset-bottom,0px))}
+.rtext{max-width:36em;margin:0 auto;padding:0 var(--r-pad);font-family:var(--r-font);font-size:var(--r-size);line-height:var(--r-lh);color:var(--r-fg);overflow-wrap:break-word;-webkit-text-size-adjust:100%}
+.rtext p,.rtext div{margin:0 0 .6em}
+.rtext.justify p,.rtext.justify div{text-align:justify;-webkit-hyphens:auto;hyphens:auto}
+.rtext h2,.rtext h3,.rtext h4{font-family:var(--r-font);font-weight:600;line-height:1.3;margin:1.4em 0 .8em;text-align:left;color:var(--r-fg)}
+.rtext h2{font-size:1.4em}.rtext h3{font-size:1.25em}.rtext h4{font-size:1.1em}
+.rtext em{font-style:italic}.rtext strong{font-weight:600}
+.rtext blockquote{margin:1em 0 1em .6em;padding-left:1em;border-left:2px solid var(--r-line);font-style:italic}
+.rtext ul,.rtext ol{padding-left:1.4em;margin:0 0 .8em}
+.rtext .poem{margin:1em 0 1em 1em}.rtext .poem p,.rtext .v{margin:0;text-align:left}
+.rtext .ta{text-align:right;font-style:italic}
+.rtext hr{border:0;border-top:1px solid var(--r-line);margin:2em auto;width:30%}
+.rtext pre{white-space:pre-wrap;font-size:.85em}
+.rtext sup,.rtext sub{font-size:.7em;line-height:0}
+.rch-k{max-width:36em;margin:0 auto 6px;padding:0 var(--r-pad);font-size:14px;color:var(--r-muted);font-family:var(--body)}
+.rch-title{max-width:36em;margin:0 auto 1.2em;padding:0 var(--r-pad);font-family:var(--display);font-size:clamp(26px,7.4vw,34px);line-height:1.15;color:var(--r-fg);-webkit-hyphens:auto;hyphens:auto;overflow-wrap:break-word}
+.rchnav{max-width:36em;margin:2.4em auto 0;padding:0 var(--r-pad);display:flex;flex-direction:column;gap:10px;font-family:var(--body)}
+.rchnav button{display:block;width:100%;text-align:left;border:1px solid var(--r-line);border-radius:16px;padding:12px 16px;color:var(--r-fg);font-size:16px}
+.rchnav button small{display:block;font-size:13px;color:var(--r-muted)}
+.rbar{position:absolute;left:0;right:0;z-index:2;background:var(--r-bar);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-family:var(--body);transition:transform .22s ease,opacity .22s ease}
+.rtop{top:0;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;border-bottom:1px solid var(--r-line);display:flex;align-items:center;gap:6px}
+.rbottom{bottom:0;padding:8px 18px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--r-line)}
+.reader.bars-off .rtop{transform:translateY(-100%);opacity:0;pointer-events:none}
+.reader.bars-off .rbottom{transform:translateY(100%);opacity:0;pointer-events:none}
+.rbtn{color:var(--r-fg);font-size:15px;padding:8px 8px;border-radius:10px;white-space:nowrap;flex:none}
+.rbtn svg{width:22px;height:22px;display:block}
+.rtitle{flex:1;min-width:0;text-align:center;font-size:14px;color:var(--r-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rinfo{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--r-muted)}
+.rinfo span:first-child{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rinfo span:last-child{flex:none}
+.rprog{height:3px;border-radius:2px;background:var(--r-line);margin-top:7px;overflow:hidden}
+.rprog i{display:block;height:100%;background:var(--r-fg);opacity:.7}
+.rshade{position:absolute;inset:0;z-index:3;background:rgba(0,0,0,.18)}
+.rpanel{position:absolute;left:0;right:0;bottom:0;z-index:4;max-height:78%;overflow-y:auto;background:var(--r-bg);color:var(--r-fg);border-top:1px solid var(--r-line);border-radius:22px 22px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.18);padding:16px 20px calc(20px + env(safe-area-inset-bottom,0px));font-family:var(--body);animation:rise .22s ease}
+.rpanel-in{max-width:560px;margin:0 auto}
+.rp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px}
+.rp-title{font-family:var(--display);font-size:clamp(25px,7vw,30px);line-height:1.15;overflow-wrap:anywhere}
+.rp-x{color:var(--r-muted);font-size:22px;line-height:1;padding:4px 6px;flex:none}
+.rp-ph{font-size:15px;color:var(--r-muted)}
+.rp-k{font-size:13px;color:var(--r-muted);margin:14px 0 5px}
+.rp-def{font-size:15px;line-height:1.5;margin:4px 0}
+.rp-def i{color:var(--r-muted)}
+.rp-cx{font-size:15px;font-style:italic;color:var(--r-muted);line-height:1.5;overflow-wrap:anywhere}
+.rp-in{width:100%;font:inherit;font-size:16px;color:var(--r-fg);background:transparent;border:1px solid var(--r-line);border-radius:12px;padding:9px 12px}
+.rp-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.rp-btn{border-radius:99px;padding:10px 18px;font-size:15px;border:1px solid var(--r-line);color:var(--r-fg)}
+.rp-btn.main{background:var(--r-fg);color:var(--r-bg);border-color:var(--r-fg)}
+.rp-link{font-size:14px;color:var(--r-accent);text-decoration:underline;text-underline-offset:3px;padding:4px 2px}
+.rp-swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rp-sw{border:1.5px solid var(--r-line);border-radius:14px;padding:10px 6px;font-size:14px;text-align:center;line-height:1.25}
+.rp-sw b{display:block;font-family:'Literata',Georgia,serif;font-size:19px;font-weight:400}
+.rp-sw[aria-pressed="true"]{border-color:var(--r-accent);box-shadow:0 0 0 1px var(--r-accent) inset}
+.rp-seg{display:flex;border:1px solid var(--r-line);border-radius:99px;padding:3px;gap:2px}
+.rp-seg button{flex:1;padding:6px 6px;border-radius:99px;font-size:14px;color:var(--r-muted);white-space:nowrap}
+.rp-seg button[aria-pressed="true"]{background:var(--r-fg);color:var(--r-bg)}
+.rp-step{display:flex;align-items:center;gap:10px}
+.rp-step button{min-width:44px;height:38px;border:1px solid var(--r-line);border-radius:99px;color:var(--r-fg);font-size:16px}
+.rp-step output{min-width:48px;text-align:center;font-size:16px}
+.rp-toc button{display:block;width:100%;text-align:left;padding:10px 0;border-top:1px solid var(--r-line);font-size:15px;color:var(--r-fg);overflow-wrap:anywhere}
+.rp-toc button[aria-current="true"]{font-weight:600;color:var(--r-accent)}
+.rsel{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:3;max-width:calc(100% - 32px);background:var(--r-fg);color:var(--r-bg);border-radius:99px;padding:10px 18px;font-size:15px;font-family:var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.reader.split .rpane{position:absolute;left:0;right:0}
+.reader.split .rpane.p-top{top:0;height:50%;padding-bottom:18px;border-bottom:1px solid var(--r-line)}
+.reader.split .rpane.p-bottom{top:50%;height:50%;padding-top:14px}
+.reader.split .rpane .rch-title{font-size:clamp(20px,5.6vw,26px)}
+.rbtn[aria-pressed="true"]{color:var(--r-accent)}
+::highlight(rword){background-color:var(--r-sel)}
+::highlight(rsaved){text-decoration:underline dotted;text-decoration-color:var(--r-accent);text-decoration-thickness:1.5px;text-underline-offset:3px}
+
+/* v3 ui refresh */
+.page-head h1{font-size:clamp(30px,8.6vw,36px)}
+.page-head{margin:4px 0 18px}
+.segbar{display:flex;border:1px solid var(--rule);border-radius:99px;padding:3px;gap:2px;margin:14px 0 22px}
+.segbar button{flex:1;padding:8px 6px;border-radius:99px;font-size:15px;color:var(--stone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.segbar button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:22px;padding:16px 18px;margin-bottom:12px}
+.card.tap{display:block;width:100%;text-align:left}
+.card-k{display:block;font-size:13px;color:var(--stone);margin-bottom:6px}
+.card-t{display:block;font-family:var(--display);font-size:clamp(22px,6.2vw,26px);line-height:1.15;color:var(--ink)}
+.card-s{display:block;font-size:14px;color:var(--stone);margin-top:4px;line-height:1.4}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid2 .card{margin-bottom:0}
+.home-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.home-top .date{margin-top:2px}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--rule);border-radius:50%;color:var(--ink)}
+.iconbtn svg{width:20px;height:20px}
+.card .row:first-child,.card .card-k + .row{border-top:0;padding-top:4px}
+.card .row:last-child{border-bottom:0;padding-bottom:4px}
+.card .inscription{margin:0}
+.card .inscription p{font-size:clamp(24px,6.6vw,32px)}
+.card .inscription cite{margin-top:12px}
+.card .rituals{margin-bottom:0}
+.card .principle{margin:0}
+.card .timecard{border:0;padding:0;margin:0;background:transparent}
+.lvl{display:grid;grid-template-columns:72px minmax(0,1fr);gap:14px;align-items:center}
+.ring{width:72px;height:72px;display:block}
+.ring .bg{fill:none;stroke:var(--rule);stroke-width:6}
+.ring .fg{fill:none;stroke:var(--accent);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .4s ease}
+.ring text{font-family:var(--display);font-size:26px;fill:var(--ink)}
+.lvl-name{font-family:var(--display);font-size:clamp(19px,5.6vw,22px);color:var(--ink);line-height:1.1;overflow-wrap:break-word;-webkit-hyphens:auto;hyphens:auto}
+.lvl-sub{font-size:14px;color:var(--stone);margin-top:3px}
+.xpbar{display:block;height:6px;border-radius:3px;background:var(--rule);overflow:hidden;margin-top:10px}
+.xpbar i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.lvl-foot{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--stone);margin-top:6px}
+.wordcard-t{display:block;font-family:var(--display);font-size:28px;color:var(--ink);line-height:1.1;margin-top:2px}
+.wordcard-a{display:block;font-size:16px;margin-top:6px;color:var(--text)}
+.hidden-ans{color:var(--stone);font-style:italic}
+/* experiments */
+.exp{background:var(--surface);border:1px solid var(--rule);border-radius:22px;padding:14px 16px;margin-bottom:12px}
+.exp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.exp-title{display:block;text-align:left;font-weight:600;color:var(--ink);font-size:17px;line-height:1.3;overflow-wrap:anywhere}
+.exp-type{display:inline-block;font-size:11px;letter-spacing:.04em;border-radius:6px;padding:1px 6px;line-height:1.6;margin-top:4px}
+.exp-type.avoid{background:var(--accent-soft);color:var(--accent)}
+.exp-type.do{background:var(--rule);color:var(--text)}
+.exp-timer{font-family:var(--display);font-size:clamp(24px,6.8vw,30px);color:var(--ink);line-height:1.1;margin:10px 0 2px;font-variant-numeric:tabular-nums}
+.exp-sub{font-size:14px;color:var(--stone)}
+.exp-bar{display:block;height:5px;border-radius:3px;background:var(--rule);overflow:hidden;margin:10px 0 12px}
+.exp-bar i{display:block;height:100%;border-radius:3px;background:var(--ink)}
+.exp-actions{display:flex;gap:8px;flex-wrap:wrap}
+.exp-actions .btn{padding:9px 16px;font-size:15px}
+.exp-done{font-size:14px;color:var(--stone)}
+.exp-done b{color:var(--ink);font-weight:600}
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,10px);gap:3px;margin:12px 0 6px;overflow-x:auto}
+.heat i{display:block;width:10px;height:10px;border-radius:2px;background:var(--rule)}
+.heat i.ok{background:var(--v-justice)}
+.heat i.fail{background:var(--accent)}
+.heat i.today{box-shadow:0 0 0 1.5px var(--ink) inset}
+.heat-legend{display:flex;gap:14px;font-size:12px;color:var(--stone);margin-bottom:12px}
+.heat-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.stat4{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:10px;margin:8px 0 14px}
+.stat4 div{border-top:1px solid var(--rule);padding-top:8px}
+.stat4 b{display:block;font-family:var(--display);font-weight:400;font-size:24px;color:var(--ink);line-height:1.1}
+.stat4 span{display:block;font-size:12.5px;color:var(--stone);line-height:1.3;margin-top:2px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.bars-svg{width:100%;height:auto;display:block;margin:6px 0 4px}
+.bars-svg .bar{fill:var(--ink);opacity:.8}
+.bars-svg .bar.exp{fill:var(--v-justice)}
+.bars-svg .lab{font-size:10px;fill:var(--stone);font-family:var(--body)}
+.bars-svg .val{font-size:10px;fill:var(--stone);font-family:var(--body)}
+.bars-svg .axis{stroke:var(--rule)}
+/* progress / badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin:8px 0 20px}
+.badge{border:1px solid var(--rule);border-radius:18px;padding:12px 10px;text-align:center;background:var(--surface)}
+.badge .bi{font-family:var(--display);font-size:24px;color:var(--ink);line-height:1}
+.badge .bn{display:block;font-size:13px;color:var(--ink);margin-top:6px;line-height:1.25;overflow-wrap:break-word;-webkit-hyphens:auto;hyphens:auto}
+.badge .bd{display:block;font-size:11.5px;color:var(--stone);margin-top:3px;line-height:1.3}
+.badge.locked{opacity:.45}
+.xp-list{margin:0 0 20px;padding:0;list-style:none}
+.xp-list li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--rule);font-size:15px}
+.xp-list li:last-child{border-bottom:1px solid var(--rule)}
+.xp-list li b{font-weight:600;color:var(--ink);white-space:nowrap}
+/* home config */
+.hrow{display:grid;grid-template-columns:1fr auto auto auto;gap:6px;align-items:center;padding:8px 0;border-top:1px solid var(--rule)}
+.hrow:last-child{border-bottom:1px solid var(--rule)}
+.hrow .hn{font-size:16px}
+.hrow .hn.off{color:var(--stone)}
+.hrow button{min-width:36px;height:34px;border:1px solid var(--rule);border-radius:99px;font-size:14px;color:var(--ink)}
+.hrow button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.wlink{display:block;width:100%;text-align:left;padding:12px 0;border-top:1px solid var(--rule);font-size:16px;color:var(--ink)}
+.wlink small{display:block;font-size:13px;color:var(--stone);margin-top:2px}
+.wlink:last-child{border-bottom:1px solid var(--rule)}
+.field-col{margin:10px 0}
+.field-col label{display:block;font-size:14px;color:var(--stone);margin-bottom:6px}
+.field-col input,.field-col textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:transparent;border:1px solid var(--rule);border-radius:12px;padding:9px 12px}
+.tiny-seg{display:inline-flex;border:1px solid var(--rule);border-radius:99px;padding:3px;gap:2px}
+.tiny-seg button{padding:6px 14px;border-radius:99px;font-size:14px;color:var(--stone)}
+.tiny-seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
 .tx-wisdom{color:var(--v-wisdom)} .tx-courage{color:var(--v-courage)} .tx-justice{color:var(--v-justice)} .tx-temperance{color:var(--v-temperance)}
-.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:99px;font-size:15px;max-width:calc(100% - 40px);text-align:center;animation:rise .2s ease}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:16px;font-size:15px;line-height:1.4;max-width:min(420px,calc(100% - 40px));width:max-content;text-align:center;animation:toastin .2s ease}
+@keyframes toastin{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
 .sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 @media (min-width:560px){
   .ritual{min-height:220px;padding:22px}
@@ -321,6 +529,7 @@ textarea{width:100%;font:inherit;color:inherit;resize:none;overflow:hidden;line-
 <div id="main" class="app"></div>
 <nav class="tabbar" aria-label="Разделы"><div class="tabbar-inner" id="tabs"></div></nav>
 <div id="sheet"></div>
+<div id="reader"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){
@@ -702,7 +911,9 @@ const ICON = {
   list:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 6h11M8 11h11M8 16h11" stroke-linecap="round"/><circle cx="4" cy="6" r="1.2"/><circle cx="4" cy="11" r="1.2"/><circle cx="4" cy="16" r="1.2"/></svg>',
   radar:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M11 2.5 19.5 11 11 19.5 2.5 11Z" stroke-linejoin="round"/><path d="M11 6.5 17 11l-6 3-4.5-3Z" stroke-linejoin="round"/></svg>',
   book:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 3.5h11a3 3 0 0 1 3 3V19H7a3 3 0 0 1-3-3Z" stroke-linejoin="round"/><path d="M4 16a3 3 0 0 1 3-3h11M8 7.5h6" stroke-linecap="round"/></svg>',
-  dot:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="5"/></svg>'
+  dot:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="5"/></svg>',
+  openbook:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M11 6.2C9 4.7 6.5 4.1 3.3 4.3v12.4c3.2-.2 5.7.4 7.7 1.9 2-1.5 4.5-2.1 7.7-1.9V4.3c-3.2-.2-5.7.4-7.7 1.9Z" stroke-linejoin="round"/><path d="M11 6.2v12.4"/></svg>',
+  gear:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="3"/><path d="M11 2.5v2.2M11 17.3v2.2M2.5 11h2.2M17.3 11h2.2M5 5l1.6 1.6M15.4 15.4 17 17M5 17l1.6-1.6M15.4 6.6 17 5" stroke-linecap="round"/></svg>'
 };
 
 /* ---------- state ---------- */
@@ -723,18 +934,33 @@ const state = {
   vWindow: 30,
   vMode: 'virtues',
   time: loadTime(),
-  timeDirty: false
+  timeDirty: false,
+  books: lsGet('portik.v1.books', []),
+  dict: lsGet('portik.v1.dict', []),
+  rprefs: Object.assign({ theme:'auto', size:19, lh:1.65, margin:'m', font:'serif', justify:false }, lsGet('portik.v1.reader', {})),
+  reader: null,
+  readBusy: false,
+  readBusyText: '',
+  confirmBook: null,
+  pairA: '',
+  pairB: '',
+  exps: lsGet('portik.v1.exps', []),
+  home: lsGet('portik.v1.home', null),
+  sub: Object.assign({ practice:'ex', growth:'virtue', library:'teaching' }, lsGet('portik.v1.sub', {})),
+  dictView: { q:'', open:null, confirmDel:null },
+  wordShown: false,
+  wordSeed: 0
 };
 const TABS = [
   {id:'today', label:'Сегодня', icon:'today'},
-  {id:'practice', label:'Практика', icon:'list'},
-  {id:'virtue', label:'Добродетель', icon:'radar'},
-  {id:'teaching', label:'Учение', icon:'col'},
+  {id:'practice', label:'Практика', icon:'list', segs:[['ex','Упражнения'],['exp','Эксперименты']]},
+  {id:'growth', label:'Рост', icon:'radar', segs:[['virtue','Добродетель'],['progress','Уровень']]},
+  {id:'library', label:'Библиотека', icon:'openbook', segs:[['teaching','Учение'],['books','Книги'],['dict','Словарь']]},
   {id:'journal', label:'Дневник', icon:'book'}
 ];
 const hash = (location.hash || '').slice(1);
-if (hash === 'citadel') state.tab = 'teaching';
-else if (TABS.some(t => t.id === hash)) state.tab = hash;
+const HASH_MAP = { today:['today',''], practice:['practice','ex'], exp:['practice','exp'], growth:['growth',''], virtue:['growth','virtue'], progress:['growth','progress'], library:['library',''], teaching:['library','teaching'], citadel:['library','teaching'], read:['library','books'], books:['library','books'], dict:['library','dict'], journal:['journal',''], morning:['today',''], evening:['today',''] };
+if (HASH_MAP[hash]){ state.tab = HASH_MAP[hash][0]; if (HASH_MAP[hash][1]) state.sub[state.tab] = HASH_MAP[hash][1]; }
 
 /* ---------- storage ---------- */
 const store = {
@@ -1101,6 +1327,1131 @@ function wheel(p){
   return s + '</svg>';
 }
 
+/* ---------- reader: storage ---------- */
+const LS_BOOKS = 'portik.v1.books', LS_DICT = 'portik.v1.dict', LS_RPREFS = 'portik.v1.reader';
+const RPREFS_DEFAULT = { theme:'auto', size:19, lh:1.65, margin:'m', font:'serif', justify:true };
+const R_THEMES = [['auto','Авто'],['light','Светлая'],['sepia','Сепия'],['gray','Серая'],['night','Ночь'],['black','Черная']];
+const R_FONTS = { serif:"'Literata', Georgia, serif", georgia:"Georgia, 'Times New Roman', serif", sans:"-apple-system, system-ui, 'Segoe UI', Roboto, sans-serif" };
+const R_PAD = { s:14, m:24, l:38 };
+const IDB = {
+  db: null,
+  open(){
+    if (this.db) return Promise.resolve(this.db);
+    return new Promise((res, rej) => {
+      const r = indexedDB.open('portik-reader', 1);
+      r.onupgradeneeded = () => { const d = r.result; if (!d.objectStoreNames.contains('books')) d.createObjectStore('books', { keyPath:'id' }); };
+      r.onsuccess = () => { this.db = r.result; res(this.db); };
+      r.onerror = () => rej(r.error);
+    });
+  },
+  async run(mode, fn){
+    const d = await this.open();
+    return new Promise((res, rej) => {
+      const t = d.transaction('books', mode); let out;
+      const req = fn(t.objectStore('books'));
+      if (req) req.onsuccess = () => { out = req.result; };
+      t.oncomplete = () => res(out); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error);
+    });
+  },
+  put(b){ return this.run('readwrite', st => st.put(b)); },
+  get(id){ return this.run('readonly', st => st.get(id)); },
+  del(id){ return this.run('readwrite', st => st.delete(id)); }
+};
+function saveBooks(){ lsSet(LS_BOOKS, state.books); }
+function saveDict(){ lsSet(LS_DICT, state.dict); }
+function saveRPrefs(){ lsSet(LS_RPREFS, state.rprefs); }
+
+/* ---------- reader: parsing ---------- */
+async function unzip(buf){
+  const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  let eocd = -1;
+  for (let i = buf.length - 22; i >= Math.max(0, buf.length - 65557); i--){ if (dv.getUint32(i, true) === 0x06054b50){ eocd = i; break; } }
+  if (eocd < 0) throw new Error('zip');
+  const count = dv.getUint16(eocd + 10, true);
+  let off = dv.getUint32(eocd + 16, true);
+  const entries = {}; const dec = new TextDecoder();
+  for (let i = 0; i < count; i++){
+    if (dv.getUint32(off, true) !== 0x02014b50) break;
+    const method = dv.getUint16(off + 10, true), csize = dv.getUint32(off + 20, true);
+    const nlen = dv.getUint16(off + 28, true), xlen = dv.getUint16(off + 30, true), clen = dv.getUint16(off + 32, true);
+    const lho = dv.getUint32(off + 42, true);
+    entries[dec.decode(buf.subarray(off + 46, off + 46 + nlen))] = { method, csize, lho };
+    off += 46 + nlen + xlen + clen;
+  }
+  async function read(name){
+    const e = entries[name]; if (!e) return null;
+    const ln = dv.getUint16(e.lho + 26, true), lx = dv.getUint16(e.lho + 28, true);
+    const start = e.lho + 30 + ln + lx, data = buf.subarray(start, start + e.csize);
+    if (e.method === 0) return data;
+    if (e.method === 8){
+      if (typeof DecompressionStream !== 'function') throw new Error('old-browser');
+      const stream = new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+      return new Uint8Array(await new Response(stream).arrayBuffer());
+    }
+    throw new Error('zip-method');
+  }
+  return { names: Object.keys(entries), read };
+}
+function decodeText(buf){
+  let b = buf;
+  if (b[0] === 0xEF && b[1] === 0xBB && b[2] === 0xBF) b = b.subarray(3);
+  try { return new TextDecoder('utf-8', { fatal:true }).decode(b); } catch(e){}
+  try { return new TextDecoder('windows-1251').decode(b); } catch(e){ return new TextDecoder().decode(b); }
+}
+function decodeXml(buf){
+  const head = new TextDecoder('latin1').decode(buf.subarray(0, 200));
+  const m = /encoding=["']([\w-]+)["']/i.exec(head);
+  if (m && !/utf-?8/i.test(m[1])){ try { return new TextDecoder(m[1].toLowerCase()).decode(buf); } catch(e){} }
+  return decodeText(buf);
+}
+function resolvePath(base, href){
+  const clean = decodeURIComponent((href || '').split('#')[0]);
+  const parts = (clean.startsWith('/') ? clean.slice(1) : base + clean).split('/');
+  const out = [];
+  parts.forEach(p => { if (p === '..') out.pop(); else if (p && p !== '.') out.push(p); });
+  return out.join('/');
+}
+const SKIP_TAGS = new Set(['script','style','head','title','img','image','svg','iframe','object','embed','audio','video','canvas','nav','form','input','button','select','textarea','math','noscript','meta','link']);
+function cleanHtml(node){
+  let out = '';
+  for (const c of node.childNodes){
+    if (c.nodeType === 3){ out += esc(c.nodeValue); continue; }
+    if (c.nodeType !== 1) continue;
+    const n = (c.localName || '').toLowerCase();
+    if (SKIP_TAGS.has(n)) continue;
+    const inner = cleanHtml(c);
+    switch (n){
+      case 'p': out += '<p>' + inner + '</p>'; break;
+      case 'div': case 'section': case 'article': case 'tr': case 'aside': case 'header': case 'footer': case 'figure': case 'figcaption': case 'dl': case 'dd': case 'dt':
+        out += inner.trim() ? '<div>' + inner + '</div>' : ''; break;
+      case 'h1': case 'h2': out += '<h2>' + inner + '</h2>'; break;
+      case 'h3': out += '<h3>' + inner + '</h3>'; break;
+      case 'h4': case 'h5': case 'h6': out += '<h4>' + inner + '</h4>'; break;
+      case 'em': case 'i': case 'cite': case 'dfn': out += '<em>' + inner + '</em>'; break;
+      case 'strong': case 'b': out += '<strong>' + inner + '</strong>'; break;
+      case 'br': out += '<br>'; break;
+      case 'hr': out += '<hr>'; break;
+      case 'blockquote': out += '<blockquote>' + inner + '</blockquote>'; break;
+      case 'ul': case 'ol': out += '<' + n + '>' + inner + '</' + n + '>'; break;
+      case 'li': out += '<li>' + inner + '</li>'; break;
+      case 'sup': case 'sub': out += '<' + n + '>' + inner + '</' + n + '>'; break;
+      case 'pre': out += '<pre>' + inner + '</pre>'; break;
+      case 'td': case 'th': out += inner + ' '; break;
+      default: out += inner;
+    }
+  }
+  return out;
+}
+const plainLen = html => html.replace(/<[^>]+>/g, '').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ').trim().length;
+function firstHeading(html){ const m = /<h[234]>([\s\S]*?)<\/h[234]>/.exec(html); return m ? m[1].replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim().slice(0, 120) : ''; }
+function detectLang(chapters){
+  const sample = chapters.slice(0, 4).map(c => c.html).join(' ').replace(/<[^>]+>/g, ' ').slice(0, 30000);
+  const cyr = (sample.match(/[а-яё]/gi) || []).length, lat = (sample.match(/[a-z]/gi) || []).length;
+  return cyr > lat ? 'ru' : 'en';
+}
+function normLang(meta, chapters){
+  const m = (meta || '').toLowerCase();
+  if (m.startsWith('ru')) return 'ru';
+  if (m.startsWith('en')) return 'en';
+  return detectLang(chapters);
+}
+async function parseEpub(buf, fname){
+  const z = await unzip(buf);
+  if (z.names.some(n => /META-INF\/encryption\.xml$/i.test(n))) throw new Error('drm');
+  const textOf = async n => { const d = await z.read(n); return d ? decodeText(d) : null; };
+  const xml = s => new DOMParser().parseFromString(s, 'application/xml');
+  const cont = await textOf('META-INF/container.xml');
+  let opfPath = '';
+  if (cont){ const rf = xml(cont).getElementsByTagNameNS('*', 'rootfile')[0]; if (rf) opfPath = rf.getAttribute('full-path') || ''; }
+  if (!opfPath) opfPath = z.names.find(n => n.toLowerCase().endsWith('.opf')) || '';
+  const opfText = opfPath ? await textOf(opfPath) : null;
+  if (!opfText) throw new Error('epub');
+  const opf = xml(opfText);
+  const base = opfPath.includes('/') ? opfPath.slice(0, opfPath.lastIndexOf('/') + 1) : '';
+  const meta = tag => { const el = opf.getElementsByTagNameNS('*', tag)[0]; return el ? el.textContent.replace(/\s+/g, ' ').trim() : ''; };
+  const manifest = {};
+  for (const it of opf.getElementsByTagNameNS('*', 'item')) manifest[it.getAttribute('id')] = { href: it.getAttribute('href'), type: it.getAttribute('media-type') || '', props: it.getAttribute('properties') || '' };
+  /* table of contents: EPUB3 nav or EPUB2 ncx */
+  const toc = {};
+  try {
+    const navItem = Object.values(manifest).find(m => /\bnav\b/.test(m.props));
+    const ncxItem = Object.values(manifest).find(m => /ncx/.test(m.type));
+    if (navItem){
+      const np = resolvePath(base, navItem.href), nb = np.includes('/') ? np.slice(0, np.lastIndexOf('/') + 1) : '';
+      const t = await textOf(np);
+      if (t){ const d = new DOMParser().parseFromString(t, 'text/html'); d.querySelectorAll('nav a[href]').forEach(a => { const k = resolvePath(nb, a.getAttribute('href')); if (!toc[k]) toc[k] = a.textContent.replace(/\s+/g, ' ').trim(); }); }
+    } else if (ncxItem){
+      const np = resolvePath(base, ncxItem.href), nb = np.includes('/') ? np.slice(0, np.lastIndexOf('/') + 1) : '';
+      const t = await textOf(np);
+      if (t){ const d = xml(t); for (const pt of d.getElementsByTagNameNS('*', 'navPoint')){ const lab = pt.getElementsByTagNameNS('*', 'text')[0], ct = pt.getElementsByTagNameNS('*', 'content')[0]; if (lab && ct){ const k = resolvePath(nb, ct.getAttribute('src')); if (!toc[k]) toc[k] = lab.textContent.replace(/\s+/g, ' ').trim(); } } }
+    }
+  } catch(e){}
+  const chapters = [];
+  for (const ref of opf.getElementsByTagNameNS('*', 'itemref')){
+    const it = manifest[ref.getAttribute('idref')];
+    if (!it || !/html|xml/.test(it.type)) continue;
+    const path = resolvePath(base, it.href);
+    const src = await textOf(path);
+    if (!src) continue;
+    let doc = new DOMParser().parseFromString(src, 'application/xhtml+xml');
+    if (doc.getElementsByTagName('parsererror').length) doc = new DOMParser().parseFromString(src, 'text/html');
+    const body = doc.body || doc.getElementsByTagName('body')[0];
+    if (!body) continue;
+    const html = cleanHtml(body);
+    if (plainLen(html) < 3) continue;
+    chapters.push({ title: toc[path] || firstHeading(html) || ('Глава ' + (chapters.length + 1)), html });
+  }
+  if (!chapters.length) throw new Error('empty');
+  return { title: meta('title') || fname.replace(/\.[^.]+$/, ''), author: meta('creator'), lang: normLang(meta('language'), chapters), format:'EPUB', chapters };
+}
+function fb2Html(node){
+  let out = '';
+  for (const c of node.childNodes){
+    if (c.nodeType === 3){ out += esc(c.nodeValue); continue; }
+    if (c.nodeType !== 1) continue;
+    const n = c.localName;
+    switch (n){
+      case 'p': out += '<p>' + fb2Html(c) + '</p>'; break;
+      case 'v': out += '<p class="v">' + fb2Html(c) + '</p>'; break;
+      case 'title': out += '<h3>' + esc(c.textContent.replace(/\s+/g, ' ').trim()) + '</h3>'; break;
+      case 'subtitle': out += '<h4>' + fb2Html(c) + '</h4>'; break;
+      case 'emphasis': out += '<em>' + fb2Html(c) + '</em>'; break;
+      case 'strong': out += '<strong>' + fb2Html(c) + '</strong>'; break;
+      case 'empty-line': out += '<br>'; break;
+      case 'epigraph': case 'cite': out += '<blockquote>' + fb2Html(c) + '</blockquote>'; break;
+      case 'text-author': out += '<p class="ta">' + fb2Html(c) + '</p>'; break;
+      case 'poem': case 'stanza': out += '<div class="poem">' + fb2Html(c) + '</div>'; break;
+      case 'a': out += (c.getAttribute('type') === 'note' ? '<sup>' + esc(c.textContent.trim()) + '</sup>' : fb2Html(c)); break;
+      case 'sup': case 'sub': out += '<' + n + '>' + fb2Html(c) + '</' + n + '>'; break;
+      case 'image': case 'binary': break;
+      default: out += fb2Html(c);
+    }
+  }
+  return out;
+}
+function parseFb2(text, fname){
+  const doc = new DOMParser().parseFromString(text, 'application/xml');
+  if (doc.getElementsByTagName('parsererror').length) throw new Error('fb2');
+  const q = (root, tag) => root ? root.getElementsByTagNameNS('*', tag)[0] : null;
+  const ti = q(doc, 'title-info');
+  const title = q(ti, 'book-title') ? q(ti, 'book-title').textContent.trim() : fname.replace(/\.fb2(\.zip)?$/i, '');
+  const au = q(ti, 'author');
+  const author = au ? ['first-name','middle-name','last-name'].map(t => q(au, t) ? q(au, t).textContent.trim() : '').filter(Boolean).join(' ') : '';
+  const lang = q(ti, 'lang') ? q(ti, 'lang').textContent.trim() : '';
+  const chapters = [];
+  const kids = (el, name) => [...el.children].filter(c => c.localName === name);
+  const titleOf = el => { const t = kids(el, 'title')[0]; return t ? t.textContent.replace(/\s+/g, ' ').trim() : ''; };
+  function collect(sec, prefix){
+    const subs = kids(sec, 'section');
+    const t = titleOf(sec);
+    if (!subs.length){ chapters.push({ title: (prefix ? prefix + '. ' : '') + (t || ('Глава ' + (chapters.length + 1))), html: fb2Html(sec) }); return; }
+    let head = '';
+    for (const c of sec.childNodes){ if (c.nodeType === 1 && c.localName === 'section') break; if (c.nodeType === 1) head += fb2Html({ childNodes:[c] }); }
+    if (plainLen(head) > 40) chapters.push({ title: t || ('Глава ' + (chapters.length + 1)), html: head });
+    subs.forEach(s => collect(s, t && plainLen(head) <= 40 ? t : ''));
+  }
+  for (const body of doc.getElementsByTagNameNS('*', 'body')){
+    if (body.getAttribute('name') && body.getAttribute('name') !== 'main') continue;
+    const secs = kids(body, 'section');
+    if (!secs.length){ chapters.push({ title, html: fb2Html(body) }); continue; }
+    let head = '';
+    for (const c of body.childNodes){ if (c.nodeType === 1 && c.localName === 'section') break; if (c.nodeType === 1) head += fb2Html({ childNodes:[c] }); }
+    if (plainLen(head) > 40) chapters.push({ title, html: head });
+    secs.forEach(s => collect(s, ''));
+  }
+  const ch = chapters.filter(c => plainLen(c.html) > 2);
+  if (!ch.length) throw new Error('empty');
+  return { title, author, lang: normLang(lang, ch), format:'FB2', chapters: ch };
+}
+function parseTxt(text, fname){
+  text = text.replace(/\r\n?/g, '\n');
+  const lines = text.split('\n');
+  const blanks = lines.filter(l => !l.trim()).length;
+  const paras = blanks > lines.length * 0.15
+    ? text.split(/\n\s*\n+/).map(p => p.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean)
+    : lines.map(l => l.trim()).filter(Boolean);
+  const isHead = p => p.length < 80 && /^(глава|часть|книга|пролог|эпилог|chapter|part|book|prologue|epilogue)(\s|$|[.:\d])|^[IVXLC]+\.?$/i.test(p);
+  const chapters = []; let cur = null, n = 0;
+  const flush = () => { if (cur && cur.parts.length) chapters.push({ title: cur.title, html: cur.parts.join('') }); };
+  for (const p of paras){
+    if (isHead(p)){ flush(); cur = { title: p, parts: ['<h3>' + esc(p) + '</h3>'] }; continue; }
+    if (!cur || cur.parts.length >= 300){ flush(); n++; cur = { title: (cur && cur.title && !/^Часть \d+$/.test(cur.title) ? cur.title.replace(/, продолжение.*$/, '') + ', продолжение ' + (++n) : 'Часть ' + n), parts: [] }; }
+    cur.parts.push('<p>' + esc(p) + '</p>');
+  }
+  flush();
+  if (!chapters.length) throw new Error('empty');
+  return { title: fname.replace(/\.txt$/i, ''), author:'', lang: detectLang(chapters), format:'TXT', chapters };
+}
+async function parseBookFile(file, onProgress){
+  const name = file.name.toLowerCase();
+  const buf = new Uint8Array(await file.arrayBuffer());
+  const isZip = buf[0] === 0x50 && buf[1] === 0x4b;
+  const isPdf = buf[0] === 0x25 && buf[1] === 0x50 && buf[2] === 0x44 && buf[3] === 0x46;
+  if (name.endsWith('.pdf') || isPdf) return parsePdf(buf, file.name, onProgress);
+  if (name.endsWith('.epub')) return parseEpub(buf, file.name);
+  if (name.endsWith('.fb2')) return parseFb2(decodeXml(buf), file.name);
+  if (name.endsWith('.txt')) return parseTxt(decodeText(buf), file.name);
+  if (isZip){
+    const z = await unzip(buf);
+    const fb = z.names.find(n => n.toLowerCase().endsWith('.fb2'));
+    if (fb) return parseFb2(decodeXml(await z.read(fb)), fb.split('/').pop());
+    if (z.names.some(n => n.toLowerCase().endsWith('.opf'))) return parseEpub(buf, file.name);
+  }
+  throw new Error('format');
+}
+async function addBookFile(file){
+  if (file.size > 60 * 1024 * 1024){ toast('Файл больше 60 МБ, такой не потяну'); return; }
+  state.readBusy = true; state.readBusyText = ''; renderMain();
+  try {
+    let lastTick = 0;
+    const b = await parseBookFile(file, (i, n) => { const now = Date.now(); if (now - lastTick > 400){ lastTick = now; state.readBusyText = 'страница ' + i + ' из ' + n; renderMain(); } });
+    const id = 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    await IDB.put({ id, title: b.title, author: b.author, lang: b.lang, format: b.format, chapters: b.chapters, addedAt: Date.now() });
+    state.books.unshift({ id, title: b.title, author: b.author, lang: b.lang, format: b.format, addedAt: Date.now(), openedAt: 0, lens: b.chapters.map(c => plainLen(c.html)), pos: { ch:0, frac:0 } });
+    saveBooks();
+    toast('Книга добавлена: ' + b.title);
+  } catch(e){
+    const m = String(e && e.message);
+    toast(m === 'drm' ? 'Книга защищена DRM, такую открыть нельзя' : m === 'old-browser' ? 'Обнови iOS: для EPUB нужна версия 16.4 или новее' : m === 'scan' ? 'В этом PDF нет текстового слоя, только картинки. Нужен PDF с текстом' : 'Не получилось открыть. Поддерживаются EPUB, FB2, TXT и PDF');
+  }
+  state.readBusy = false; state.readBusyText = ''; renderMain();
+}
+function bookProgress(m){
+  const lens = m.lens || []; const total = lens.reduce((a, b) => a + b, 0);
+  if (!total) return 0;
+  let done = 0; for (let i = 0; i < m.pos.ch && i < lens.length; i++) done += lens[i];
+  done += (lens[m.pos.ch] || 0) * (m.pos.frac || 0);
+  return Math.min(100, Math.round(done / total * 100));
+}
+
+/* ---------- reader: library tab ---------- */
+function renderRead(){
+  const books = state.books.slice().sort((a, b) => (b.openedAt || b.addedAt) - (a.openedAt || a.addedAt));
+  const last = books.find(b => b.openedAt);
+  let h = '<p class=\"sec-note\">EPUB, FB2, TXT и PDF на русском и английском. Книги хранятся только на этом устройстве. В английских книгах нажми на слово, чтобы добавить его в словарь.</p>'
+    + '<div class="lib-actions"><button class="btn primary" data-act="bookadd"' + (state.readBusy ? ' disabled' : '') + '>Загрузить книгу</button>' + (state.readBusy ? '<span class="lib-busy">Разбираю книгу' + (state.readBusyText ? ', ' + esc(state.readBusyText) : '') + '…</span>' : '') + '<input type="file" id="book-file" accept=".epub,.fb2,.zip,.txt,.pdf,application/epub+zip,text/plain,application/pdf" hidden></div>';
+  if (last){
+    const p = bookProgress(last);
+    h += '<button class="continue" data-act="ropen" data-id="' + last.id + '"><span class="c-k">Продолжить</span><span class="c-t">' + esc(last.title) + '</span>' + (last.author ? '<span class="c-a">' + esc(last.author) + '</span>' : '') + '<span class="pbar"><i style="width:' + p + '%"></i></span><span class="c-p">' + p + '% прочитано</span></button>';
+  }
+  h += '<h2 class="sec-title">Библиотека</h2>';
+  if (!books.length) h += '<p class="empty">Пока пусто. Загрузи книгу с телефона или из «Файлов».</p>';
+  else h += '<div style="margin-top:10px">' + books.map(b => '<div class="book"><button class="book-open" data-act="ropen" data-id="' + b.id + '"><span class="book-t">' + esc(b.title) + '</span><span class="book-m">' + (b.author ? '<span>' + esc(b.author) + '</span>' : '') + '<span class="tag">' + (b.lang === 'en' ? 'EN' : 'RU') + '</span><span>' + bookProgress(b) + '%</span></span></button><button class="book-del" data-act="bookdel" data-id="' + b.id + '" aria-label="Удалить книгу">' + (state.confirmBook === b.id ? 'Удалить?' : '×') + '</button></div>').join('') + '</div>';
+  h += pairsSection(books);
+  h += '<div class="spacer"></div><h2 class="sec-title">Словарь</h2><p class="sec-note">' + (state.dict.length ? state.dict.length + ' ' + plural(state.dict.length, 'слово', 'слова', 'слов') + ' из английских книг.' : 'Нажми на слово в английской книге или выдели фразу, и она появится здесь.') + '</p>'
+    + '<button class="btn ghost" data-act="seg" data-id="library:dict">Открыть словарь</button>';
+  return h;
+}
+
+function pairsSection(books){
+  const owners = state.books.filter(b => b.pair && state.books.some(x => x.id === b.pair.id));
+  let h = '<div class="spacer"></div><h2 class="sec-title">Параллельное чтение</h2><p class="sec-note">Свяжи оригинал с переводом: в читалке появится режим с двумя текстами, главы листаются вместе.</p>';
+  if (owners.length) h += '<div>' + owners.map(o => { const t = state.books.find(x => x.id === o.pair.id); return '<div class="book"><span class="book-open"><span class="book-t">' + esc(o.title) + '</span><span class="book-m"><span>и</span><span>' + esc(t.title) + '</span></span></span><button class="book-del" data-act="pairbreak" data-id="' + o.id + '">Разорвать</button></div>'; }).join('') + '</div>';
+  if (books.length >= 2){
+    const opts = sel => books.map(b => '<option value="' + b.id + '"' + (sel === b.id ? ' selected' : '') + '>' + esc(b.title) + (b.lang === 'en' ? ' (EN)' : ' (RU)') + '</option>').join('');
+    const a = state.pairA || books[0].id, bId = state.pairB || (books.find(x => x.id !== a) || books[0]).id;
+    h += '<div style="margin-top:12px"><label class="dfield" for="pair-a">Книга</label><select id="pair-a" class="pick" style="margin:0 0 6px">' + opts(a) + '</select>'
+      + '<label class="dfield" for="pair-b">Ее перевод</label><select id="pair-b" class="pick" style="margin:0 0 12px">' + opts(bId) + '</select>'
+      + '<button class="btn ghost" data-act="pairlink">Связать</button></div>';
+  } else if (!owners.length) h += '<p class="s-hint">Нужны две книги: оригинал и перевод.</p>';
+  return h;
+}
+
+/* ---------- reader: dictionary sheet ---------- */
+function dictBody(s){
+  const q = (s.q || '').trim().toLowerCase();
+  const list = state.dict.slice().sort((a, b) => b.addedAt - a.addedAt).filter(w => !q || w.term.toLowerCase().includes(q) || (w.tr || '').toLowerCase().includes(q));
+  let h = '<p class="kicker">Чтение</p><h1 class="s-title">Словарь</h1><p class="s-en">' + state.dict.length + ' ' + plural(state.dict.length, 'слово', 'слова', 'слов') + '</p>';
+  if (state.dict.length){
+    h += '<div class="drow" style="margin:4px 0 12px"><button class="btn primary small" data-act="dictquizlet">Скопировать для Quizlet</button><button class="btn ghost small" data-act="dictcsv">Скачать CSV</button></div>'
+      + '<label class="sr" for="dsearch">Поиск по словарю</label><input id="dsearch" class="dsearch" placeholder="Поиск" value="' + esc(s.q || '') + '" autocomplete="off">';
+  } else h += '<p class="s-hint">Пока пусто.</p>';
+  h += '<div id="dlist">' + list.map(w => {
+    const open = s.open === w.id;
+    let it = '<div class="dword"><button class="dword-head" data-act="dword" data-id="' + w.id + '" aria-expanded="' + open + '"><span class="dword-t">' + esc(w.term) + '</span>' + (w.phon ? '<span class="dword-ph">' + esc(w.phon) + '</span>' : '') + (w.tr ? '<span class="dword-tr">' + esc(w.tr) + '</span>' : '') + (w.ctx && !open ? '<span class="dword-cx">' + esc(w.ctx) + '</span>' : '') + '</button>';
+    if (open){
+      it += '<div class="dword-body">'
+        + '<label class="dfield" for="dw-term">Слово или фраза</label><input id="dw-term" class="dinput" value="' + esc(w.term) + '">'
+        + '<label class="dfield" for="dw-tr">Перевод</label><input id="dw-tr" class="dinput" value="' + esc(w.tr || '') + '">'
+        + (w.def ? '<p class="dfield">Значение</p><p class="s-p" style="font-size:15px">' + esc(w.def) + '</p>' : '')
+        + (w.ctx ? '<p class="dfield">Контекст</p><p class="dword-cx" style="margin:0">' + esc(w.ctx) + '</p>' : '')
+        + (w.bookTitle ? '<p class="dfield">' + esc(w.bookTitle) + ', ' + esc(fmtDay(dayKey(new Date(w.addedAt))).toLowerCase()) + '</p>' : '')
+        + '<div class="drow"><button class="btn primary small" data-act="dwsave" data-id="' + w.id + '">Сохранить</button><button class="btn ghost small" data-act="dwdel" data-id="' + w.id + '">' + (s.confirmDel === w.id ? 'Точно удалить?' : 'Удалить') + '</button></div></div>';
+    }
+    return it + '</div>';
+  }).join('') + '</div>';
+  if (q && !list.length) h += '<p class="empty">Ничего не нашлось.</p>';
+  return h;
+}
+function dictTsv(){ return state.dict.slice().sort((a, b) => a.addedAt - b.addedAt).map(w => (w.term + '\t' + (w.tr || w.def || '')).replace(/\n/g, ' ')).join('\n'); }
+async function copyText(t){
+  try { await navigator.clipboard.writeText(t); return true; } catch(e){}
+  try { const ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return ok; } catch(e){ return false; }
+}
+function downloadFile(name, text, type){
+  const blob = new Blob([text], { type });
+  let file = null; try { file = new File([blob], name, { type }); } catch(e){}
+  if (file && navigator.canShare && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && navigator.canShare({ files:[file] })){ navigator.share({ files:[file], title:name }).catch(() => {}); return; }
+  const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+}
+
+/* ---------- reader: view ---------- */
+const $reader = document.getElementById('reader');
+function readerTheme(){
+  const t = state.rprefs.theme;
+  if (t !== 'auto') return t;
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'light';
+}
+function applyReaderPrefs(){
+  const el = $reader.querySelector('.reader'); if (!el) return;
+  const P = state.rprefs;
+  el.className = 'reader rt-' + readerTheme() + (state.reader && !state.reader.bars ? ' bars-off' : '') + (state.reader && state.reader.split ? ' split' : '') + (state.reader && state.reader.flip ? ' flip' : '');
+  el.style.setProperty('--r-size', P.size + 'px');
+  el.style.setProperty('--r-lh', String(P.lh));
+  el.style.setProperty('--r-pad', (R_PAD[P.margin] || 24) + 'px');
+  el.style.setProperty('--r-font', R_FONTS[P.font] || R_FONTS.serif);
+  el.querySelectorAll('.rtext').forEach(tx => tx.classList.toggle('justify', !!P.justify));
+}
+function curMeta(){ return state.reader ? state.books.find(b => b.id === state.reader.id) : null; }
+async function openBook(id){
+  const meta = state.books.find(b => b.id === id); if (!meta) return;
+  let book = null;
+  try { book = await IDB.get(id); } catch(e){}
+  if (!book){ toast('Файл книги не найден на этом устройстве. Загрузи его заново'); return; }
+  meta.openedAt = Date.now(); saveBooks();
+  state.reader = { id, book, ch: Math.min(meta.pos.ch || 0, book.chapters.length - 1), bars: true, panel: null, split: false, flip: false, pairBook: null };
+  document.body.style.overflow = 'hidden';
+  if (pairOf(id) && state.rprefs.split){ await ensurePairBook(state.reader); if (state.reader.pairBook) state.reader.split = true; }
+  renderReader(meta.pos.frac || 0);
+}
+function closeReader(){
+  saveReaderPos();
+  clearHighlight('rword'); clearHighlight('rsaved');
+  state.reader = null; $reader.innerHTML = ''; document.body.style.overflow = '';
+  renderMain();
+}
+function rIcon(name){
+  if (name === 'toc') return '<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 6h11M7 11h11M7 16h11" stroke-linecap="round"/><circle cx="3.6" cy="6" r="1"/><circle cx="3.6" cy="11" r="1"/><circle cx="3.6" cy="16" r="1"/></svg>';
+  return '';
+}
+function rIconSplit(){ return '<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3.5" y="3.5" width="15" height="15" rx="2"/><path d="M3.5 11h15"/></svg>'; }
+function renderReader(frac){
+  const R = state.reader; if (!R) return;
+  const book = R.book, ch = book.chapters[R.ch], n = book.chapters.length;
+  const meta = curMeta();
+  const pair = pairOf(R.id);
+  let panes = paneHtml(book, R.ch, 'rscroll', true);
+  if (R.split && R.pairBook) panes += paneHtml(R.pairBook, R.ch + pair.offset, 'rscroll2', false);
+  const pct = meta ? bookProgress(meta) : 0;
+  $reader.innerHTML = '<div class="reader" role="dialog" aria-modal="true" aria-label="' + esc(book.title) + '">'
+    + panes
+    + '<div class="rbar rtop"><button class="rbtn" data-act="rclose">‹ Библиотека</button><span class="rtitle">' + esc(book.title) + '</span>'
+    + (pair ? '<button class="rbtn" data-act="rsplit" aria-label="Параллельный текст" aria-pressed="' + !!R.split + '">' + rIconSplit() + '</button>' : '')
+    + '<button class="rbtn" data-act="rtoc" aria-label="Оглавление">' + rIcon('toc') + '</button><button class="rbtn" data-act="rset" aria-label="Настройки текста" style="font-family:Georgia,serif;font-size:18px">Аа</button></div>'
+    + '<div class="rbar rbottom"><div class="rinfo"><span>' + esc(ch.title) + '</span><span id="rpct">' + pct + '%</span></div><div class="rprog"><i id="rprogbar" style="width:' + pct + '%"></i></div></div>'
+    + '<div id="rsel"></div><div id="rpanel"></div>'
+    + '</div>';
+  applyReaderPrefs();
+  const panesEls = [...$reader.querySelectorAll('.rpane')];
+  if (R.split){ panesEls.forEach(p => { p.classList.add(p.id === 'rscroll' ? (R.flip ? 'p-bottom' : 'p-top') : (R.flip ? 'p-top' : 'p-bottom')); }); }
+  const sc = document.getElementById('rscroll');
+  let lastY = 0, tmr = null;
+  requestAnimationFrame(() => {
+    sc.scrollTop = (frac || 0) * Math.max(0, sc.scrollHeight - sc.clientHeight);
+    lastY = sc.scrollTop;
+    const sc2 = document.getElementById('rscroll2');
+    if (sc2 && R.pairBook){ const m2 = state.books.find(b => b.id === R.pairBook.id); if (m2 && m2.pos && m2.pos.ch === R.ch + pair.offset) sc2.scrollTop = (m2.pos.frac || 0) * Math.max(0, sc2.scrollHeight - sc2.clientHeight); }
+    markSaved();
+  });
+  panesEls.forEach(p => {
+    let ly = 0;
+    p.addEventListener('scroll', () => {
+      const y = p.scrollTop;
+      const prevY = p.id === 'rscroll' ? lastY : ly;
+      if (state.reader && !state.reader.panel){
+        if (y > prevY + 12 && y > 80 && state.reader.bars){ state.reader.bars = false; applyReaderPrefs(); }
+        else if (y < prevY - 30 && !state.reader.bars){ state.reader.bars = true; applyReaderPrefs(); }
+      }
+      if (p.id === 'rscroll') lastY = y; else ly = y;
+      clearTimeout(tmr); tmr = setTimeout(saveReaderPos, 350);
+    }, { passive:true });
+    p.addEventListener('click', onReaderTap);
+  });
+  if (R.panel) renderRPanel();
+}
+function saveReaderPos(){
+  const R = state.reader, meta = curMeta(); if (!R || !meta) return;
+  const sc = document.getElementById('rscroll'); if (!sc) return;
+  const max = sc.scrollHeight - sc.clientHeight;
+  meta.pos = { ch: R.ch, frac: max > 0 ? Math.min(1, sc.scrollTop / max) : 1 };
+  meta.openedAt = Date.now();
+  const sc2 = document.getElementById('rscroll2');
+  if (sc2 && R.pairBook){
+    const m2 = state.books.find(b => b.id === R.pairBook.id), pair = pairOf(R.id);
+    const ch2 = R.ch + (pair ? pair.offset : 0);
+    if (m2 && ch2 >= 0 && ch2 < R.pairBook.chapters.length){ const mx = sc2.scrollHeight - sc2.clientHeight; m2.pos = { ch: ch2, frac: mx > 0 ? Math.min(1, sc2.scrollTop / mx) : 1 }; }
+  }
+  saveBooks();
+  const p = bookProgress(meta);
+  const a = document.getElementById('rpct'); if (a) a.textContent = p + '%';
+  const b = document.getElementById('rprogbar'); if (b) b.style.width = p + '%';
+}
+function gotoChapter(i){
+  const R = state.reader; if (!R) return;
+  R.ch = Math.max(0, Math.min(R.book.chapters.length - 1, i));
+  R.panel = null; R.bars = true;
+  const meta = curMeta(); if (meta){ meta.pos = { ch: R.ch, frac: 0 }; saveBooks(); }
+  renderReader(0);
+}
+
+/* highlights: tapped word and saved words */
+const canHL = () => typeof window.Highlight === 'function' && window.CSS && CSS.highlights;
+function clearHighlight(name){ if (canHL()) CSS.highlights.delete(name); }
+function markSaved(){
+  if (!canHL() || !state.reader) return;
+  CSS.highlights.delete('rsaved');
+  if (!state.dict.length) return;
+  const roots = [...$reader.querySelectorAll('.rtext[lang="en"]')]; if (!roots.length) return;
+  const terms = [...new Set(state.dict.map(w => w.term.toLowerCase().trim()).filter(t => t && t.length < 60))].sort((a, b) => b.length - a.length);
+  if (!terms.length) return;
+  const re = new RegExp("(^|[^A-Za-z'’])(" + terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ")(?=$|[^A-Za-z'’])", 'gi');
+  const ranges = []; let guard = 0;
+  for (const root of roots){
+    const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walk.nextNode()) && guard < 5000){
+      const t = node.nodeValue; re.lastIndex = 0; let m;
+      while ((m = re.exec(t)) && guard < 5000){ const s = m.index + m[1].length; const r = new Range(); r.setStart(node, s); r.setEnd(node, s + m[2].length); ranges.push(r); guard++; }
+    }
+  }
+  if (ranges.length) CSS.highlights.set('rsaved', new Highlight(...ranges));
+}
+const isWordCh = ch => /[A-Za-z'’-]/.test(ch || '');
+function wordAt(x, y){
+  let node = null, off = 0;
+  if (document.caretRangeFromPoint){ const r = document.caretRangeFromPoint(x, y); if (r){ node = r.startContainer; off = r.startOffset; } }
+  else if (document.caretPositionFromPoint){ const p = document.caretPositionFromPoint(x, y); if (p){ node = p.offsetNode; off = p.offset; } }
+  if (!node || node.nodeType !== 3 || !node.parentElement || !node.parentElement.closest('.rtext')) return null;
+  const t = node.nodeValue; let i = off;
+  if (!isWordCh(t[i]) && isWordCh(t[i - 1])) i--;
+  if (!isWordCh(t[i])) return null;
+  let s = i, e = i;
+  while (s > 0 && isWordCh(t[s - 1])) s--;
+  while (e < t.length && isWordCh(t[e])) e++;
+  while (s < e && /['’-]/.test(t[s])) s++;
+  while (e > s && /['’-]/.test(t[e - 1])) e--;
+  if (e <= s || !/[A-Za-z]/.test(t.slice(s, e))) return null;
+  const r = document.createRange(); r.setStart(node, s); r.setEnd(node, e);
+  if (![...r.getClientRects()].some(rc => x >= rc.left - 6 && x <= rc.right + 6 && y >= rc.top - 6 && y <= rc.bottom + 6)) return null;
+  const block = node.parentElement.closest('p,li,blockquote,h2,h3,h4,div,pre') || node.parentElement;
+  return { word: t.slice(s, e), range: r, ctx: sentenceAround(block, node, s) };
+}
+function sentenceAround(block, node, s){
+  let pos = 0; const w = document.createTreeWalker(block, NodeFilter.SHOW_TEXT); let n;
+  while ((n = w.nextNode())){ if (n === node){ pos += s; break; } pos += n.nodeValue.length; }
+  const full = block.textContent;
+  let a = pos, b = pos;
+  while (a > 0 && !/[.!?…]/.test(full[a - 1])) a--;
+  while (b < full.length && !/[.!?…]/.test(full[b])) b++;
+  let out = full.slice(a, Math.min(full.length, b + 1)).replace(/\s+/g, ' ').trim();
+  if (out.length > 260){ const k = Math.max(0, pos - a - 120); out = '…' + out.slice(k, k + 240).trim() + '…'; }
+  return out;
+}
+function onReaderTap(ev){
+  const R = state.reader; if (!R) return;
+  if (ev.target.closest('[data-act]')) return;
+  const sel = window.getSelection && window.getSelection();
+  if (sel && !sel.isCollapsed && String(sel).trim()) return;
+  const pane = ev.currentTarget, tx = pane && pane.querySelector('.rtext');
+  if (tx && tx.getAttribute('lang') === 'en'){
+    const hit = wordAt(ev.clientX, ev.clientY);
+    if (hit){ const src = paneBook(pane); openWord(hit.word, hit.ctx, hit.range, src); return; }
+  }
+  R.bars = !R.bars; applyReaderPrefs();
+}
+const lookupCache = {};
+async function lookupWord(term){
+  const key = term.toLowerCase();
+  if (lookupCache[key]) return lookupCache[key];
+  const res = { phon:'', defs:[], tr:'' };
+  const timeout = (p) => Promise.race([p, new Promise(r => setTimeout(() => r(null), 7000))]);
+  const single = /^[a-z'’-]+$/i.test(term);
+  const p1 = single ? timeout(fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(key)).then(r => r.ok ? r.json() : null).catch(() => null)) : Promise.resolve(null);
+  const p2 = timeout(fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(term.slice(0, 200)) + '&langpair=en|ru').then(r => r.ok ? r.json() : null).catch(() => null));
+  const [d, m] = await Promise.all([p1, p2]);
+  if (Array.isArray(d) && d[0]){
+    res.phon = d[0].phonetic || ((d[0].phonetics || []).map(x => x.text).find(Boolean)) || '';
+    for (const mm of d[0].meanings || []){ for (const df of (mm.definitions || []).slice(0, 2)){ res.defs.push({ pos: mm.partOfSpeech || '', d: df.definition }); } if (res.defs.length >= 3) break; }
+    res.defs = res.defs.slice(0, 3);
+  }
+  if (m && m.responseData && m.responseData.translatedText && String(m.responseStatus) === '200'){
+    const t = String(m.responseData.translatedText).trim();
+    if (t && !/MYMEMORY|QUERY LENGTH|INVALID/i.test(t) && t.toLowerCase() !== key) res.tr = t;
+  }
+  if (res.defs.length || res.tr) lookupCache[key] = res;
+  return res;
+}
+function findDict(term){ const k = term.toLowerCase().trim(); return state.dict.find(w => w.term.toLowerCase().trim() === k); }
+function paneBook(pane){
+  const R = state.reader; if (!R) return null;
+  if (pane && pane.id === 'rscroll2' && R.pairBook) return R.pairBook;
+  return R.book;
+}
+function openWord(word, ctx, range, src){
+  const R = state.reader; if (!R) return;
+  R.wordSrc = src || R.book;
+  const term = /^[A-Z][a-z'’-]*$/.test(word) ? word.toLowerCase() : word;
+  if (canHL() && range){ CSS.highlights.set('rword', new Highlight(range)); }
+  const ex = findDict(term);
+  R.panel = { type:'word', term, ctx: ex && ex.ctx ? ex.ctx : ctx, tr: ex ? ex.tr : '', loading: true, info: null, existing: ex ? ex.id : null };
+  renderRPanel();
+  lookupWord(term).then(info => {
+    const P = state.reader && state.reader.panel; if (!P || P.type !== 'word' || P.term !== term) return;
+    P.loading = false; P.info = info;
+    const inp = document.getElementById('rp-tr');
+    const typed = inp ? inp.value.trim() : '';
+    if (!typed && info.tr) P.tr = info.tr; else P.tr = typed || P.tr;
+    renderRPanel();
+  });
+}
+function renderRPanel(){
+  const R = state.reader; const box = document.getElementById('rpanel'); if (!R || !box) return;
+  const P = R.panel;
+  if (!P){ box.innerHTML = ''; return; }
+  let inner = '';
+  if (P.type === 'word'){
+    const info = P.info;
+    const enc = encodeURIComponent(P.term);
+    inner = '<div class="rp-head"><div><div class="rp-title" lang="en">' + esc(P.term) + '</div>' + (info && info.phon ? '<div class="rp-ph">' + esc(info.phon) + '</div>' : '') + '</div><button class="rp-x" data-act="rpclose" aria-label="Закрыть">×</button></div>'
+      + (P.loading ? '<p class="rp-def" style="color:var(--r-muted)">Ищу значение и перевод…</p>' : (info && info.defs.length ? info.defs.map(d => '<p class="rp-def" lang="en">' + (d.pos ? '<i>' + esc(d.pos) + '</i> ' : '') + esc(d.d) + '</p>').join('') : '<p class="rp-def" style="color:var(--r-muted)">Значение не нашлось, можно открыть словари ниже.</p>'))
+      + '<p class="rp-k"><label for="rp-tr">Перевод</label></p><input id="rp-tr" class="rp-in" value="' + esc(P.tr || '') + '" placeholder="Впиши свой перевод" autocomplete="off">'
+      + (P.ctx ? '<p class="rp-k">Контекст</p><p class="rp-cx" lang="en">' + esc(P.ctx) + '</p>' : '')
+      + '<div class="rp-row"><button class="rp-btn main" data-act="rpsave">' + (P.existing ? 'Обновить в словаре' : 'В словарь') + '</button>' + (P.existing ? '<button class="rp-btn" data-act="rpremove">Убрать</button>' : '') + '</div>'
+      + '<div class="rp-row"><a class="rp-link" target="_blank" rel="noopener" href="https://www.multitran.com/m.exe?s=' + enc + '&l1=1&l2=2">Multitran</a><a class="rp-link" target="_blank" rel="noopener" href="https://dictionary.cambridge.org/dictionary/english-russian/' + enc + '">Cambridge</a><a class="rp-link" target="_blank" rel="noopener" href="https://context.reverso.net/translation/english-russian/' + enc + '">Reverso</a><a class="rp-link" target="_blank" rel="noopener" href="https://translate.google.com/?sl=en&tl=ru&text=' + enc + '">Google</a></div>';
+  } else if (P.type === 'settings'){
+    const S = state.rprefs;
+    inner = '<div class="rp-head"><div class="rp-title">Текст</div><button class="rp-x" data-act="rpclose" aria-label="Закрыть">×</button></div>'
+      + '<p class="rp-k">Тема</p><div class="rp-swatches">' + R_THEMES.map(([k, l]) => { const tk = k === 'auto' ? readerTheme() : k; return '<button class="rp-sw rt-' + tk + '" style="background:var(--r-bg);color:var(--r-fg)" data-act="rptheme" data-id="' + k + '" aria-pressed="' + (S.theme === k) + '"><b>Аа</b>' + l + '</button>'; }).join('') + '</div>'
+      + '<p class="rp-k">Размер шрифта</p><div class="rp-step"><button data-act="rpsize" data-id="-1" aria-label="Меньше">А−</button><output>' + S.size + '</output><button data-act="rpsize" data-id="1" aria-label="Больше">А+</button></div>'
+      + '<p class="rp-k">Шрифт</p><div class="rp-seg">' + [['serif','Literata'],['georgia','Georgia'],['sans','Без засечек']].map(([k, l]) => '<button data-act="rpfont" data-id="' + k + '" aria-pressed="' + (S.font === k) + '">' + l + '</button>').join('') + '</div>'
+      + '<p class="rp-k">Межстрочный интервал</p><div class="rp-seg">' + [[1.45,'Плотно'],[1.65,'Обычно'],[1.85,'Свободно']].map(([k, l]) => '<button data-act="rplh" data-id="' + k + '" aria-pressed="' + (S.lh === k) + '">' + l + '</button>').join('') + '</div>'
+      + '<p class="rp-k">Поля</p><div class="rp-seg">' + [['s','Узкие'],['m','Средние'],['l','Широкие']].map(([k, l]) => '<button data-act="rpmargin" data-id="' + k + '" aria-pressed="' + (S.margin === k) + '">' + l + '</button>').join('') + '</div>'
+      + '<p class="rp-k">Выравнивание</p><div class="rp-seg"><button data-act="rpjust" data-id="1" aria-pressed="' + !!S.justify + '">По ширине</button><button data-act="rpjust" data-id="0" aria-pressed="' + !S.justify + '">По левому краю</button></div>'
+      + '<p class="rp-k">Язык книги</p><div class="rp-seg"><button data-act="rplang" data-id="ru" aria-pressed="' + (R.book.lang !== 'en') + '">Русский</button><button data-act="rplang" data-id="en" aria-pressed="' + (R.book.lang === 'en') + '">Английский</button></div>';
+    const pair = pairOf(R.id);
+    if (pair){
+      const ch2 = R.ch + pair.offset;
+      inner += '<p class="rp-k">Параллельный текст</p><div class="rp-seg"><button data-act="rpsplit" data-id="1" aria-pressed="' + !!R.split + '">Два текста</button><button data-act="rpsplit" data-id="0" aria-pressed="' + !R.split + '">Один текст</button></div>'
+        + '<p class="rp-k">Какая глава перевода идет с этой</p><div class="rp-step"><button data-act="rpoff" data-id="-1" aria-label="Предыдущая">−</button><output>глава ' + (ch2 + 1) + '</output><button data-act="rpoff" data-id="1" aria-label="Следующая">+</button></div>'
+        + (R.split ? '<div class="rp-row"><button class="rp-btn" data-act="rpflip">Поменять местами</button></div>' : '');
+    }
+  } else if (P.type === 'toc'){
+    inner = '<div class="rp-head"><div class="rp-title">Оглавление</div><button class="rp-x" data-act="rpclose" aria-label="Закрыть">×</button></div><div class="rp-toc">'
+      + R.book.chapters.map((c, i) => '<button data-act="rgoto" data-id="' + i + '" aria-current="' + (i === R.ch) + '">' + esc(c.title) + '</button>').join('') + '</div>';
+  }
+  box.innerHTML = '<div class="rshade" data-act="rpclose"></div><div class="rpanel" role="dialog" aria-label="' + (P.type === 'word' ? 'Слово' : P.type === 'toc' ? 'Оглавление' : 'Настройки текста') + '"><div class="rpanel-in">' + inner + '</div></div>';
+  if (P.type === 'toc'){ const cur = box.querySelector('[aria-current="true"]'); if (cur) cur.scrollIntoView({ block:'center' }); }
+}
+function closeRPanel(){
+  const R = state.reader; if (!R) return;
+  R.panel = null; clearHighlight('rword');
+  const box = document.getElementById('rpanel'); if (box) box.innerHTML = '';
+}
+function saveWordFromPanel(){
+  const R = state.reader, P = R && R.panel; if (!P) return;
+  const inp = document.getElementById('rp-tr'); const tr = inp ? inp.value.trim() : (P.tr || '');
+  const def = P.info && P.info.defs.length ? P.info.defs.map(d => (d.pos ? d.pos + ': ' : '') + d.d).join('; ') : '';
+  const phon = P.info ? P.info.phon : '';
+  const ex = P.existing ? state.dict.find(w => w.id === P.existing) : findDict(P.term);
+  if (ex){ ex.tr = tr; if (def) ex.def = def; if (phon) ex.phon = phon; if (P.ctx && !ex.ctx) ex.ctx = P.ctx; }
+  else state.dict.push({ id:'w' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), term: P.term, tr, def, phon, ctx: P.ctx || '', bookId: (R.wordSrc || R.book).id, bookTitle: (R.wordSrc || R.book).title, addedAt: Date.now() });
+  saveDict(); closeRPanel(); markSaved();
+  toast(ex ? 'Обновлено' : 'Добавлено в словарь');
+}
+let selTimer = null;
+document.addEventListener('selectionchange', () => {
+  clearTimeout(selTimer);
+  selTimer = setTimeout(() => {
+    const R = state.reader; const box = document.getElementById('rsel'); if (!R || !box) return;
+    const sel = window.getSelection();
+    const txt = sel && !sel.isCollapsed ? String(sel).replace(/\s+/g, ' ').trim() : '';
+    const inText = sel && sel.anchorNode && sel.anchorNode.parentElement && sel.anchorNode.parentElement.closest('.rtext');
+    if (inText && inText.getAttribute('lang') === 'en' && txt.length > 1 && txt.length <= 80 && !R.panel){
+      R.selSrc = paneBook(inText.closest('.rpane'));
+      R.selText = txt;
+      let ctx = '';
+      try { const block = sel.anchorNode.parentElement.closest('p,li,blockquote,div') || sel.anchorNode.parentElement; ctx = sentenceAround(block, sel.anchorNode, Math.min(sel.anchorOffset, sel.focusOffset)); } catch(e){}
+      R.selCtx = ctx;
+      box.innerHTML = '<button class="rsel" data-act="rselword">В словарь: «' + esc(txt) + '»</button>';
+    } else box.innerHTML = '';
+  }, 250);
+});
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveReaderPos(); });
+
+async function onReaderAct(act, id){
+  const R = state.reader;
+  if (act === 'ropen') return openBook(id);
+  if (!R) return;
+  if (act === 'rclose') return closeReader();
+  if (act === 'rnext') return gotoChapter(R.ch + 1);
+  if (act === 'rprev') return gotoChapter(R.ch - 1);
+  if (act === 'rgoto') return gotoChapter(Number(id));
+  if (act === 'rtoc'){ R.panel = { type:'toc' }; return renderRPanel(); }
+  if (act === 'rsplit' || act === 'rpsplit'){
+    const want = act === 'rsplit' ? !R.split : id === '1';
+    if (want && !(await ensurePairBook(R))) return;
+    R.split = want; state.rprefs.split = want; saveRPrefs();
+    const sc0 = document.getElementById('rscroll'); const mx0 = sc0 ? sc0.scrollHeight - sc0.clientHeight : 0;
+    const keep = R.panel; R.panel = null; renderReader(sc0 && mx0 > 0 ? sc0.scrollTop / mx0 : 0);
+    if (keep && keep.type === 'settings'){ R.panel = keep; renderRPanel(); }
+    return;
+  }
+  if (act === 'rpoff'){ setPairOffset(R, Number(id)); const sc0 = document.getElementById('rscroll'); const mx0 = sc0 ? sc0.scrollHeight - sc0.clientHeight : 0; const keep = R.panel; R.panel = null; renderReader(sc0 && mx0 > 0 ? sc0.scrollTop / mx0 : 0); R.panel = keep; renderRPanel(); return; }
+  if (act === 'rpflip'){ R.flip = !R.flip; const sc0 = document.getElementById('rscroll'); const mx0 = sc0 ? sc0.scrollHeight - sc0.clientHeight : 0; const keep = R.panel; R.panel = null; renderReader(sc0 && mx0 > 0 ? sc0.scrollTop / mx0 : 0); R.panel = keep; renderRPanel(); return; }
+  if (act === 'rset'){ R.panel = { type:'settings' }; return renderRPanel(); }
+  if (act === 'rpclose') return closeRPanel();
+  if (act === 'rpsave') return saveWordFromPanel();
+  if (act === 'rpremove'){
+    const P = R.panel; state.dict = state.dict.filter(w => w.id !== P.existing); saveDict(); closeRPanel(); markSaved(); toast('Убрано из словаря'); return;
+  }
+  if (act === 'rselword'){
+    const t = R.selText; if (!t) return;
+    try { window.getSelection().removeAllRanges(); } catch(e){}
+    document.getElementById('rsel').innerHTML = '';
+    return openWord(t, R.selCtx || '', null, R.selSrc);
+  }
+  const sc = document.getElementById('rscroll');
+  const max = sc ? sc.scrollHeight - sc.clientHeight : 0, frac = sc && max > 0 ? sc.scrollTop / max : 0;
+  const S = state.rprefs;
+  if (act === 'rptheme') S.theme = id;
+  else if (act === 'rpsize') S.size = Math.max(14, Math.min(30, S.size + Number(id)));
+  else if (act === 'rpfont') S.font = id;
+  else if (act === 'rplh') S.lh = Number(id);
+  else if (act === 'rpmargin') S.margin = id;
+  else if (act === 'rpjust') S.justify = id === '1';
+  else if (act === 'rplang'){
+    R.book.lang = id; const meta = curMeta(); if (meta){ meta.lang = id; saveBooks(); }
+    try { await IDB.put(R.book); } catch(e){}
+    renderReader(frac); return;
+  } else return;
+  saveRPrefs(); applyReaderPrefs(); renderRPanel();
+  if (sc){ const m2 = sc.scrollHeight - sc.clientHeight; sc.scrollTop = frac * m2; }
+}
+if (window.matchMedia){ try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (state.reader) applyReaderPrefs(); }); } catch(e){} }
+
+
+/* ---------- reader: pdf ---------- */
+let pdfLibPromise = null;
+function loadPdfJs(){
+  if (!pdfLibPromise) pdfLibPromise = import('./vendor/pdf.min.mjs').then(lib => { lib.GlobalWorkerOptions.workerSrc = new URL('vendor/pdf.worker.min.mjs', location.href).href; return lib; });
+  return pdfLibPromise;
+}
+function median(arr){ if (!arr.length) return 0; const a = arr.slice().sort((x, y) => x - y); return a[Math.floor(a.length / 2)]; }
+function pdfPageParas(items){
+  const lines = [];
+  for (const it of items){
+    if (!it.str || !it.transform) continue;
+    const x = it.transform[4], y = it.transform[5], h = Math.abs(it.height || it.transform[3] || 10) || 10;
+    let line = lines.find(l => Math.abs(l.y - y) <= Math.max(2, h * 0.45));
+    if (!line){ line = { y, h, parts: [] }; lines.push(line); }
+    line.parts.push({ x, w: it.width || 0, s: it.str, h });
+  }
+  lines.sort((a, b) => b.y - a.y);
+  const texts = [];
+  for (const l of lines){
+    l.parts.sort((a, b) => a.x - b.x);
+    let s = '', endX = null;
+    for (const p of l.parts){
+      if (endX !== null && p.x - endX > p.h * 0.22 && !s.endsWith(' ') && !p.s.startsWith(' ')) s += ' ';
+      s += p.s; endX = Math.max(endX === null ? -1e9 : endX, p.x + p.w);
+    }
+    s = s.replace(/\s+/g, ' ').trim();
+    if (!s) continue;
+    texts.push({ text: s, y: l.y, h: l.h, x0: l.parts[0].x, x1: endX });
+  }
+  if (!texts.length) return [];
+  const gaps = []; for (let i = 1; i < texts.length; i++){ const g = texts[i - 1].y - texts[i].y; if (g > 0) gaps.push(g); }
+  const medGap = median(gaps) || 12;
+  const minX = Math.min(...texts.map(l => l.x0)), maxX1 = Math.max(...texts.map(l => l.x1));
+  const paras = []; let cur = '';
+  const push = () => { if (cur.trim()) paras.push(cur.trim()); cur = ''; };
+  for (let i = 0; i < texts.length; i++){
+    const l = texts[i], prev = texts[i - 1];
+    if (/^[\divxlc]{1,6}$/i.test(l.text)) continue;
+    let brk = false;
+    if (prev){
+      if (prev.y - l.y > medGap * 1.55) brk = true;
+      if (l.x0 > minX + l.h * 1.1) brk = true;
+      if (/[.!?…»"”]$/.test(prev.text) && prev.x1 < maxX1 - l.h * 5) brk = true;
+    }
+    if (brk) push();
+    if (!cur) cur = l.text;
+    else if (/[A-Za-zА-Яа-яёЁ]-$/.test(cur) && /^[a-zа-яё]/.test(l.text)) cur = cur.slice(0, -1) + l.text;
+    else cur += ' ' + l.text;
+  }
+  push();
+  return paras;
+}
+async function parsePdf(buf, fname, onProgress){
+  const lib = await loadPdfJs();
+  const doc = await lib.getDocument({ data: buf, disableFontFace: true, isEvalSupported: false }).promise;
+  const n = doc.numPages;
+  let title = fname.replace(/\.pdf$/i, ''), author = '';
+  try { const md = await doc.getMetadata(); const info = (md && md.info) || {}; if (info.Title && String(info.Title).trim()) title = String(info.Title).trim(); if (info.Author && String(info.Author).trim()) author = String(info.Author).trim(); } catch(e){}
+  let marks = [];
+  try {
+    const outline = await doc.getOutline();
+    if (outline && outline.length){
+      for (const it of outline.slice(0, 400)){
+        let dest = it.dest;
+        if (typeof dest === 'string') dest = await doc.getDestination(dest);
+        if (Array.isArray(dest) && dest[0] && typeof dest[0] === 'object'){ try { marks.push({ page: await doc.getPageIndex(dest[0]), title: String(it.title || '').replace(/\s+/g, ' ').trim() }); } catch(e){} }
+      }
+      marks.sort((a, b) => a.page - b.page);
+      marks = marks.filter((m, i) => i === 0 || m.page !== marks[i - 1].page);
+    }
+  } catch(e){}
+  const pages = []; let chars = 0;
+  for (let i = 1; i <= n; i++){
+    const page = await doc.getPage(i);
+    const tc = await page.getTextContent();
+    const paras = pdfPageParas(tc.items);
+    chars += paras.join('').length;
+    pages.push(paras);
+    try { page.cleanup(); } catch(e){}
+    if (onProgress && (i % 5 === 0 || i === n)) onProgress(i, n);
+  }
+  try { doc.destroy(); } catch(e){}
+  if (chars < 150 * Math.min(n, 3)) throw new Error('scan');
+  /* running headers and footers: short paragraphs repeated at page edges */
+  const edge = {};
+  pages.forEach(p => { [p[0], p[p.length - 1]].forEach(t => { if (t && t.length < 90) edge[t] = (edge[t] || 0) + 1; }); });
+  const junk = new Set(Object.keys(edge).filter(t => edge[t] >= 3));
+  const ranges = [];
+  if (marks.length >= 2 && marks.length <= 300){
+    if (marks[0].page > 0) ranges.push({ from: 0, to: marks[0].page - 1, title: 'Начало' });
+    marks.forEach((m, i) => ranges.push({ from: m.page, to: i + 1 < marks.length ? marks[i + 1].page - 1 : n - 1, title: m.title || ('Глава ' + (i + 1)) }));
+  } else {
+    const step = 12;
+    for (let s = 0; s < n; s += step) ranges.push({ from: s, to: Math.min(n - 1, s + step - 1), title: 'Страницы ' + (s + 1) + '-' + Math.min(n, s + step) });
+  }
+  const chapters = [];
+  for (const r of ranges){
+    let html = '';
+    for (let p = r.from; p <= r.to; p++) html += pages[p].filter(t => !junk.has(t)).map(t => '<p>' + esc(t) + '</p>').join('');
+    if (plainLen(html) > 0) chapters.push({ title: r.title, html });
+  }
+  if (!chapters.length) throw new Error('empty');
+  return { title, author, lang: detectLang(chapters), format:'PDF', chapters };
+}
+
+/* ---------- reader: parallel pairs ---------- */
+function pairOf(id){
+  const m = state.books.find(b => b.id === id);
+  if (m && m.pair && state.books.some(b => b.id === m.pair.id)) return { id: m.pair.id, offset: m.pair.offset || 0, owner: m.id, sign: 1 };
+  const o = state.books.find(b => b.pair && b.pair.id === id);
+  if (o) return { id: o.id, offset: -(o.pair.offset || 0), owner: o.id, sign: -1 };
+  return null;
+}
+function setPairOffset(R, delta){
+  const p = pairOf(R.id); if (!p) return;
+  const owner = state.books.find(b => b.id === p.owner); if (!owner) return;
+  owner.pair.offset = (owner.pair.offset || 0) + delta * p.sign;
+  saveBooks();
+}
+async function ensurePairBook(R){
+  const p = pairOf(R.id); if (!p) return null;
+  if (R.pairBook && R.pairBook.id === p.id) return R.pairBook;
+  try { R.pairBook = await IDB.get(p.id); } catch(e){ R.pairBook = null; }
+  if (!R.pairBook) toast('Файл второй книги не найден на этом устройстве');
+  return R.pairBook;
+}
+function paneHtml(book, chIndex, paneId, primary){
+  const n = book.chapters.length;
+  if (chIndex < 0 || chIndex >= n) return '<div class="rscroll rpane" id="' + paneId + '"><p class="rch-k" style="margin-top:12px">В этой книге нет главы ' + (chIndex + 1) + '. Сдвиг глав можно поправить в настройках «Аа».</p></div>';
+  const ch = book.chapters[chIndex];
+  const showTitle = ch.title && !/<h[234]>/.test(ch.html.slice(0, 600));
+  const prev = chIndex > 0 ? book.chapters[chIndex - 1] : null, next = chIndex < n - 1 ? book.chapters[chIndex + 1] : null;
+  const lang = book.lang === 'en' ? 'en' : 'ru';
+  return '<div class="rscroll rpane" id="' + paneId + '" data-book="' + book.id + '">'
+    + '<p class="rch-k">Глава ' + (chIndex + 1) + ' из ' + n + (primary ? '' : ', ' + (lang === 'en' ? 'английский' : 'русский')) + '</p>'
+    + (showTitle ? '<h1 class="rch-title" lang="' + lang + '">' + esc(ch.title) + '</h1>' : '')
+    + '<article class="rtext" lang="' + lang + '">' + ch.html + '</article>'
+    + (primary ? '<nav class="rchnav">' + (next ? '<button data-act="rnext"><small>Следующая глава</small>' + esc(next.title) + '</button>' : '<p class="rch-k" style="padding:0">Конец книги</p>') + (prev ? '<button data-act="rprev"><small>Предыдущая глава</small>' + esc(prev.title) + '</button>' : '') + '</nav>' : '<div style="height:24px"></div>')
+    + '</div>';
+}
+
+/* ---------- v3: experiments ---------- */
+const LS_EXPS = 'portik.v1.exps', LS_HOME = 'portik.v1.home', LS_SUB = 'portik.v1.sub';
+const EXP_PRESETS = [
+  { title:'Без сахара', type:'avoid' }, { title:'Без соцсетей', type:'avoid' }, { title:'Без кофе', type:'avoid' }, { title:'Без алкоголя', type:'avoid' }, { title:'Без жалоб', type:'avoid' }, { title:'Без новостей', type:'avoid' },
+  { title:'Холодный душ', type:'do' }, { title:'Подъем до 7', type:'do' }, { title:'20 минут чтения', type:'do' }, { title:'Пешком вместо такси', type:'do' }, { title:'10 минут тишины', type:'do' }, { title:'Вечерний разбор', type:'do' }
+];
+const EXP_TARGETS = [7, 14, 21, 30, 66];
+function saveExps(){ lsSet(LS_EXPS, state.exps); }
+function lastFailFromDays(e){ const ks = Object.keys(e.days || {}).filter(k => e.days[k] === 'fail').sort(); if (!ks.length) return null; const d = parseDate(ks[ks.length - 1]); return d ? d.getTime() + 12 * 3600000 : null; }
+function expById(id){ return state.exps.find(e => e.id === id); }
+function expAnchor(e){ return Math.max(e.startAt || e.createdAt, e.lastFail || 0); }
+function expOkDays(e){ return Object.values(e.days || {}).filter(v => v === 'ok').length; }
+function expFailDays(e){ return Object.values(e.days || {}).filter(v => v === 'fail').length; }
+function expStreak(e){
+  const d = new Date(); let n = 0;
+  if ((e.days || {})[dayKey(d)] !== 'ok') d.setDate(d.getDate() - 1);
+  while ((e.days || {})[dayKey(d)] === 'ok'){ n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function expBest(e){
+  const keys = Object.keys(e.days || {}).sort(); let best = 0, cur = 0, prev = null;
+  keys.forEach(k => { if (e.days[k] !== 'ok'){ cur = 0; prev = null; return; } const d = parseDate(k); if (prev && Math.round((d - prev) / 86400000) === 1) cur++; else cur = 1; best = Math.max(best, cur); prev = d; });
+  return best;
+}
+function fmtElapsed(ms){
+  ms = Math.max(0, ms);
+  const d = Math.floor(ms / 86400000), h = Math.floor(ms % 86400000 / 3600000), m = Math.floor(ms % 3600000 / 60000);
+  if (d >= 10) return d + ' ' + plural(d, 'день', 'дня', 'дней') + ' ' + h + ' ч';
+  if (d > 0) return d + ' ' + plural(d, 'день', 'дня', 'дней') + ' ' + h + ' ч ' + pad(m) + ' мин';
+  if (h > 0) return h + ' ч ' + pad(m) + ' мин';
+  return m + ' мин';
+}
+function expTimerText(e){
+  if (e.type === 'avoid'){ if (e.status !== 'active') return expOkDays(e) + ' ' + plural(expOkDays(e), 'день', 'дня', 'дней') + ' чисто'; return 'держусь ' + fmtElapsed(Date.now() - expAnchor(e)); }
+  const s = expStreak(e);
+  return 'серия ' + s + ' ' + plural(s, 'день', 'дня', 'дней');
+}
+function expProgress(e){
+  if (!e.target) return 0;
+  const done = e.type === 'avoid' ? Math.max(expOkDays(e), Math.floor((Date.now() - expAnchor(e)) / 86400000)) : expOkDays(e);
+  return Math.min(1, done / e.target);
+}
+function expTodayMark(e){ return (e.days || {})[today()] || null; }
+function heatStrip(e, weeks){
+  const n = weeks * 7; const cells = []; const start = new Date(); start.setDate(start.getDate() - (n - 1));
+  const dow = (start.getDay() + 6) % 7; start.setDate(start.getDate() - dow);
+  const total = n + dow; const tk = today();
+  for (let i = 0; i < total; i++){
+    const d = new Date(start); d.setDate(start.getDate() + i); const k = dayKey(d);
+    const v = (e.days || {})[k]; const future = k > tk;
+    cells.push('<i class="' + (v === 'ok' ? 'ok' : v === 'fail' ? 'fail' : '') + (k === tk ? ' today' : '') + '"' + (future ? ' style="opacity:.3"' : '') + ' title="' + k + '"></i>');
+  }
+  return '<div class="heat" aria-label="Календарь эксперимента">' + cells.join('') + '</div>';
+}
+function expCard(e, compact){
+  const mark = expTodayMark(e), active = e.status === 'active';
+  const prog = Math.round(expProgress(e) * 100);
+  let actions = '';
+  if (active){
+    if (e.type === 'avoid') actions = '<button class="btn ' + (mark === 'ok' ? 'primary' : 'ghost') + '" data-act="expmark" data-id="' + e.id + ':ok">Держусь</button><button class="btn ' + (mark === 'fail' ? 'primary' : 'ghost') + '" data-act="expmark" data-id="' + e.id + ':fail">Сорвался</button>';
+    else actions = '<button class="btn ' + (mark === 'ok' ? 'primary' : 'ghost') + '" data-act="expmark" data-id="' + e.id + ':ok">Сделал</button><button class="btn ' + (mark === 'fail' ? 'primary' : 'ghost') + '" data-act="expmark" data-id="' + e.id + ':fail">Пропустил</button>';
+  } else actions = '<span class="exp-done">' + (e.status === 'done' ? '<b>Завершен</b>' : '<b>Остановлен</b>') + ', ' + expOkDays(e) + ' ' + plural(expOkDays(e), 'день', 'дня', 'дней') + ' в зачет</span>';
+  return '<div class="exp">'
+    + '<div class="exp-head"><button class="exp-title" data-act="expopen" data-id="' + e.id + '">' + esc(e.title) + '<br><span class="exp-type ' + e.type + '">' + (e.type === 'avoid' ? 'отказ' : 'делать') + (e.target ? ', цель ' + e.target + ' ' + plural(e.target, 'день', 'дня', 'дней') : '') + '</span></button>'
+    + (compact ? '' : '<button class="iconbtn" data-act="expopen" data-id="' + e.id + '" aria-label="Подробнее">›</button>') + '</div>'
+    + '<div class="exp-timer" data-exp="' + e.id + '">' + esc(expTimerText(e)) + '</div>'
+    + (e.target ? '<span class="exp-bar"><i style="width:' + prog + '%"></i></span>' : '<div style="height:10px"></div>')
+    + '<div class="exp-actions">' + actions + '</div>'
+    + '</div>';
+}
+function renderExperiments(){
+  const act = state.exps.filter(e => e.status === 'active'), past = state.exps.filter(e => e.status !== 'active');
+  let h = '<p class="sec-note">Добровольное упражнение воли, как у Сенеки: отказаться от чего-то или делать что-то каждый день. Таймер держит счет, срыв его обнуляет, но не отменяет эксперимент.</p>'
+    + '<div class="lib-actions"><button class="btn primary" data-act="expnew">Новый эксперимент</button></div>';
+  if (!act.length && !past.length) h += '<p class="empty">Пока ничего. Начни с малого: один отказ на семь дней.</p>';
+  h += act.map(e => expCard(e, false)).join('');
+  if (past.length) h += '<div class="spacer"></div><h2 class="sec-title">Завершенные</h2><div style="margin-top:12px">' + past.sort((a, b) => (b.endedAt || 0) - (a.endedAt || 0)).map(e => expCard(e, false)).join('') + '</div>';
+  return h;
+}
+function expNewBody(s){
+  return '<p class="kicker">Эксперимент</p><h1 class="s-title">Что проверяем?</h1>'
+    + '<p class="s-hint">Эпиктет называл это упражнением: сначала в малом, потом в большом.</p>'
+    + '<div class="presets">' + EXP_PRESETS.map(p => '<button class="chip" data-act="exppreset" data-id="' + esc(p.title) + '|' + p.type + '">' + esc(p.title) + '</button>').join('') + '</div>'
+    + '<div class="field-col"><label for="exp-title">Название</label><input id="exp-title" value="' + esc(s.title || '') + '" placeholder="Например, без сладкого" maxlength="60"></div>'
+    + '<div class="field-col"><label>Тип</label><div class="tiny-seg"><button data-act="exptype" data-id="avoid" aria-pressed="' + (s.type !== 'do') + '">Отказ</button><button data-act="exptype" data-id="do" aria-pressed="' + (s.type === 'do') + '">Делать каждый день</button></div></div>'
+    + '<div class="field-col"><label>Цель, дней</label><div class="chips wrap">' + EXP_TARGETS.map(t => '<button class="chip" data-act="exptarget" data-id="' + t + '" aria-pressed="' + (s.target === t) + '">' + t + '</button>').join('') + '<button class="chip" data-act="exptarget" data-id="0" aria-pressed="' + (!s.target) + '">Без срока</button></div></div>'
+    + '<div class="field-col"><label for="exp-why">Зачем мне это</label><textarea id="exp-why" rows="2" placeholder="Одна фраза, к которой вернусь в момент слабости">' + esc(s.why || '') + '</textarea></div>';
+}
+function expDetailBody(s){
+  const e = expById(s.id); if (!e) return '<p class="empty">Эксперимент не найден.</p>';
+  const ok = expOkDays(e), fail = expFailDays(e), best = expBest(e), total = ok + fail, rate = total ? Math.round(ok / total * 100) : 0;
+  const since = new Date(e.startAt || e.createdAt);
+  let h = '<p class="kicker">' + (e.type === 'avoid' ? 'Отказ' : 'Делать каждый день') + (e.status !== 'active' ? ', ' + (e.status === 'done' ? 'завершен' : 'остановлен') : '') + '</p><h1 class="s-title">' + esc(e.title) + '</h1>'
+    + '<p class="s-en">с ' + esc(fmtDay(dayKey(since)).toLowerCase()) + (e.target ? ', цель ' + e.target + ' ' + plural(e.target, 'день', 'дня', 'дней') : '') + '</p>'
+    + '<p class="exp-timer" data-exp="' + e.id + '" style="font-size:clamp(28px,8vw,38px)">' + esc(expTimerText(e)) + '</p>'
+    + (e.target ? '<span class="exp-bar"><i style="width:' + Math.round(expProgress(e) * 100) + '%"></i></span>' : '')
+    + (e.why ? '<p class="principle" style="margin:14px 0 6px">' + esc(e.why) + '</p>' : '')
+    + '<div class="stat4"><div><b>' + ok + '</b><span>' + plural(ok, 'день', 'дня', 'дней') + ' в зачет</span></div><div><b>' + fail + '</b><span>' + plural(fail, 'срыв', 'срыва', 'срывов') + '</span></div><div><b>' + best + '</b><span>лучшая серия</span></div><div><b>' + rate + '%</b><span>успех</span></div></div>'
+    + '<p class="s-h">Последние 10 недель</p>' + heatStrip(e, 10)
+    + '<div class="heat-legend"><span><i class="ok" style="background:var(--v-justice)"></i>в зачет</span><span><i style="background:var(--accent)"></i>срыв</span><span><i style="background:var(--rule)"></i>без отметки</span></div>';
+  if (e.status === 'active'){
+    const mark = expTodayMark(e);
+    h += '<p class="s-h">Сегодня</p><div class="exp-actions">'
+      + '<button class="btn ' + (mark === 'ok' ? 'primary' : 'ghost') + '" data-act="expmark" data-id="' + e.id + ':ok">' + (e.type === 'avoid' ? 'Держусь' : 'Сделал') + '</button>'
+      + '<button class="btn ' + (mark === 'fail' ? 'primary' : 'ghost') + '" data-act="expmark" data-id="' + e.id + ':fail">' + (e.type === 'avoid' ? 'Сорвался' : 'Пропустил') + '</button></div>'
+      + '<p class="s-h">Управление</p><div class="exp-actions"><button class="btn ghost" data-act="expfinish" data-id="' + e.id + '">Завершить</button><button class="btn ghost" data-act="expstop" data-id="' + e.id + '">Остановить</button><button class="btn ghost" data-act="expdel" data-id="' + e.id + '">' + (s.confirmDel ? 'Точно удалить?' : 'Удалить') + '</button></div>';
+  } else {
+    h += '<p class="s-h">Управление</p><div class="exp-actions"><button class="btn ghost" data-act="expresume" data-id="' + e.id + '">Возобновить</button><button class="btn ghost" data-act="expdel" data-id="' + e.id + '">' + (s.confirmDel ? 'Точно удалить?' : 'Удалить') + '</button></div>';
+  }
+  return h;
+}
+let expTick = null;
+function startExpTicker(){
+  if (expTick) return;
+  expTick = setInterval(() => {
+    const els = document.querySelectorAll('.exp-timer[data-exp]');
+    if (!els.length) return;
+    els.forEach(el => { const e = expById(el.dataset.exp); if (e) el.textContent = expTimerText(e); });
+  }, 15000);
+}
+
+/* ---------- v3: xp, levels, badges ---------- */
+const LEVELS = [[0,'Ученик'],[100,'Слушатель'],[250,'Продвигающийся'],[500,'Упражняющийся'],[900,'Стойкий'],[1500,'Невозмутимый'],[2400,'Гражданин мира'],[3600,'Хранитель цитадели'],[5200,'Почти мудрец'],[7500,'Мудрец, по слухам']];
+function weekKey(ms){ const d = new Date(ms); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow); return dayKey(d); }
+function xpData(){
+  const parts = { morning:0, evening:0, exercise:0, rating:0, exp:0, words:0, books:0, time:0 };
+  const weeks = {};
+  const add = (k, v, ms) => { parts[k] += v; if (ms){ const w = weekKey(ms); weeks[w] = (weeks[w] || 0) + v; } };
+  state.entries.forEach(e => {
+    if (e.kind === 'morning') add('morning', 10, e.createdAt);
+    else if (e.kind === 'evening') add('evening', 15, e.createdAt);
+    else if (e.kind === 'exercise') add('exercise', 10, e.createdAt);
+    else if (e.kind === 'rating') add('rating', 3, e.createdAt);
+  });
+  state.exps.forEach(e => {
+    Object.keys(e.days || {}).forEach(k => { if (e.days[k] === 'ok'){ const d = parseDate(k); add('exp', 5, d ? d.getTime() : 0); } });
+    if (e.status === 'done') add('exp', 50, e.endedAt || Date.now());
+  });
+  state.dict.forEach(w => add('words', 2, w.addedAt));
+  state.books.forEach(b => { const p = bookProgress(b); if (p > 0) add('books', Math.round(p / 5), b.openedAt || b.addedAt); });
+  Object.keys(state.time.log || {}).forEach(k => { if (sumObj(state.time.log[k]) > 0){ const d = parseDate(k); add('time', 1, d ? d.getTime() : 0); } });
+  const total = Object.values(parts).reduce((a, b) => a + b, 0);
+  let li = 0; for (let i = 0; i < LEVELS.length; i++) if (total >= LEVELS[i][0]) li = i;
+  const next = LEVELS[li + 1] ? LEVELS[li + 1][0] : null;
+  const base = LEVELS[li][0];
+  return { total, parts, weeks, level: li + 1, name: LEVELS[li][1], next, frac: next ? (total - base) / (next - base) : 1 };
+}
+function levelRing(x, size){
+  const r = 30, c = 2 * Math.PI * r, off = c * (1 - Math.min(1, x.frac));
+  return '<svg class="ring" viewBox="0 0 72 72" role="img" aria-label="Уровень ' + x.level + '"><circle class="bg" cx="36" cy="36" r="' + r + '"/><circle class="fg" cx="36" cy="36" r="' + r + '" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '" transform="rotate(-90 36 36)"/><text x="36" y="45" text-anchor="middle">' + x.level + '</text></svg>';
+}
+function levelCard(){
+  const x = xpData(), s = streak();
+  return '<button class="card tap" data-act="progress"><div class="lvl">' + levelRing(x) + '<div><div class="lvl-name">' + esc(x.name) + '</div><div class="lvl-sub">' + x.total + ' XP' + (x.next ? ', до следующего уровня ' + (x.next - x.total) : ', потолок, дальше только практика') + '</div><span class="xpbar"><i style="width:' + Math.round(x.frac * 100) + '%"></i></span><div class="lvl-foot"><span>' + s + ' ' + plural(s, 'день подряд', 'дня подряд', 'дней подряд') + '</span><span>уровень ' + x.level + ' из ' + LEVELS.length + '</span></div></div></div></button>';
+}
+const BADGES = [
+  { id:'first', n:'Первый шаг', d:'Первая запись в дневнике', ok: () => state.entries.some(e => e.kind !== 'rating') },
+  { id:'week', n:'Семь дней', d:'Неделя подряд', ok: () => streak() >= 7 },
+  { id:'month', n:'Месяц', d:'30 дней подряд', ok: () => streak() >= 30 },
+  { id:'judge', n:'Вечерний судья', d:'10 вечерних разборов', ok: () => state.entries.filter(e => e.kind === 'evening').length >= 10 },
+  { id:'dawn', n:'Утренний страж', d:'10 утренних подготовок', ok: () => state.entries.filter(e => e.kind === 'morning').length >= 10 },
+  { id:'faces', n:'Четыре грани', d:'Практика по всем граням добродетели', ok: () => { const p = practice(0); return VIRT.every(v => p.v[v.id] > 0); } },
+  { id:'ascet', n:'Аскет', d:'Завершенный эксперимент', ok: () => state.exps.some(e => e.status === 'done') },
+  { id:'iron', n:'Железная воля', d:'30 дней в зачет в одном эксперименте', ok: () => state.exps.some(e => expOkDays(e) >= 30) },
+  { id:'words50', n:'Филолог', d:'50 слов в словаре', ok: () => state.dict.length >= 50 },
+  { id:'words200', n:'Лексикон', d:'200 слов в словаре', ok: () => state.dict.length >= 200 },
+  { id:'reader', n:'Читатель', d:'Дочитанная книга', ok: () => state.books.some(b => bookProgress(b) >= 99) },
+  { id:'time7', n:'Учет времени', d:'7 дней отметок у пожирателей', ok: () => Object.keys(state.time.log || {}).filter(k => sumObj(state.time.log[k]) > 0).length >= 7 },
+  { id:'mirror', n:'Самопознание', d:'4 самооценки добродетели', ok: () => state.entries.filter(e => e.kind === 'rating').length >= 4 },
+  { id:'becker', n:'Следую фактам', d:'Все 6 упражнений Беккера', ok: () => EX.filter(x => x.src === 'becker').every(x => state.entries.some(e => e.exId === x.id)) },
+  { id:'pigliucci', n:'Двенадцать', d:'Все 12 упражнений Пильюччи', ok: () => EX.filter(x => x.src === 'pigliucci' && x.id.startsWith('p-')).every(x => x.flow || state.entries.some(e => e.exId === x.id)) }
+];
+function barsSvg(values, labels, cls){
+  const W = 360, H = 150, pad = 24, n = values.length; const max = Math.max(1, ...values);
+  const bw = (W - pad * 2) / n, gap = Math.min(8, bw * .25);
+  let s = '<svg class="bars-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Диаграмма по неделям">';
+  s += '<line class="axis" x1="' + pad + '" y1="' + (H - 22) + '" x2="' + (W - pad) + '" y2="' + (H - 22) + '"/>';
+  values.forEach((v, i) => {
+    const h = Math.round((H - 50) * v / max), x = pad + i * bw + gap / 2, y = H - 22 - h;
+    s += '<rect class="bar ' + (cls || '') + '" x="' + x.toFixed(1) + '" y="' + y + '" width="' + (bw - gap).toFixed(1) + '" height="' + h + '" rx="3"/>';
+    if (v) s += '<text class="val" x="' + (x + (bw - gap) / 2).toFixed(1) + '" y="' + (y - 4) + '" text-anchor="middle">' + v + '</text>';
+    if (labels[i]) s += '<text class="lab" x="' + (x + (bw - gap) / 2).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + esc(labels[i]) + '</text>';
+  });
+  return s + '</svg>';
+}
+function lastWeeks(n){ const out = []; const d = new Date(); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow); for (let i = n - 1; i >= 0; i--){ const w = new Date(d); w.setDate(d.getDate() - i * 7); out.push(dayKey(w)); } return out; }
+function renderProgress(){
+  const x = xpData();
+  const wk = lastWeeks(12);
+  const labels = wk.map((k, i) => (i % 2 === 0 || i === wk.length - 1) ? k.slice(8, 10) + '.' + k.slice(5, 7) : '');
+  const xpVals = wk.map(k => x.weeks[k] || 0);
+  const expVals = wk.map(k => state.exps.reduce((a, e) => a + Object.keys(e.days || {}).filter(d => e.days[d] === 'ok' && weekKey(parseDate(d).getTime()) === k).length, 0));
+  const names = { morning:'Утренние подготовки', evening:'Вечерние разборы', exercise:'Упражнения', rating:'Самооценки', exp:'Эксперименты', words:'Слова в словаре', books:'Чтение', time:'Учет времени' };
+  const earned = BADGES.filter(b => b.ok()), locked = BADGES.filter(b => !b.ok());
+  return levelCard()
+    + '<p class="sec-note" style="margin-top:4px">Опыт считается из того, что уже есть в дневнике, экспериментах и словаре. Ничего отдельно не копится, нечему потеряться.</p>'
+    + '<h2 class="sec-title">Опыт по неделям</h2>' + barsSvg(xpVals, labels, '')
+    + '<h2 class="sec-title" style="margin-top:18px">Эксперименты: дни в зачет</h2>' + barsSvg(expVals, labels, 'exp')
+    + '<h2 class="sec-title" style="margin-top:18px">Из чего сложилось</h2><ul class="xp-list">' + Object.keys(names).map(k => '<li><span>' + names[k] + '</span><b>' + x.parts[k] + ' XP</b></li>').join('') + '</ul>'
+    + '<h2 class="sec-title">Достижения</h2><p class="sec-note">' + earned.length + ' из ' + BADGES.length + '</p>'
+    + '<div class="badges">' + earned.map(b => '<div class="badge"><div class="bi">' + roman(BADGES.indexOf(b) + 1) + '</div><span class="bn">' + esc(b.n) + '</span><span class="bd">' + esc(b.d) + '</span></div>').join('') + locked.map(b => '<div class="badge locked"><div class="bi">' + roman(BADGES.indexOf(b) + 1) + '</div><span class="bn">' + esc(b.n) + '</span><span class="bd">' + esc(b.d) + '</span></div>').join('') + '</div>'
+    + '<h2 class="sec-title">Уровни</h2><ul class="xp-list">' + LEVELS.map((l, i) => '<li' + (i + 1 === x.level ? ' style="color:var(--ink);font-weight:600"' : '') + '><span>' + (i + 1) + '. ' + l[1] + '</span><b>' + l[0] + ' XP</b></li>').join('') + '</ul>';
+}
+function roman(n){ const m = [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]; let s = ''; for (const [v, r] of m){ while (n >= v){ s += r; n -= v; } } return s; }
+
+/* ---------- v3: home ---------- */
+const HOME_WIDGETS = [
+  { id:'level', name:'Уровень и серия' }, { id:'quote', name:'Цитата дня' }, { id:'rituals', name:'Утро и вечер' }, { id:'exercise', name:'Упражнение дня' },
+  { id:'experiments', name:'Эксперименты' }, { id:'time', name:'Время' }, { id:'weak', name:'Слабая грань' }, { id:'principle', name:'Принцип дня' },
+  { id:'reading', name:'Продолжить чтение' }, { id:'word', name:'Слово из словаря' }
+];
+function homeConf(){
+  const c = state.home || {};
+  const order = Array.isArray(c.order) ? c.order.filter(id => HOME_WIDGETS.some(w => w.id === id)) : [];
+  HOME_WIDGETS.forEach(w => { if (!order.includes(w.id)) order.push(w.id); });
+  return { order, off: new Set(Array.isArray(c.off) ? c.off : []) };
+}
+function saveHome(conf){ state.home = { order: conf.order, off: [...conf.off] }; lsSet(LS_HOME, state.home); }
+function widgetHtml(id){
+  const t = entriesOn(today());
+  if (id === 'level') return levelCard();
+  if (id === 'quote'){ const q = quoteOfDay(); return '<div class="card"><figure class="inscription" style="margin:0"><p>' + esc(q.t) + '</p><cite>' + esc(q.r) + '</cite></figure></div>'; }
+  if (id === 'rituals'){
+    const mDone = t.some(e => e.kind === 'morning'), eDone = t.some(e => e.kind === 'evening');
+    return '<section class="rituals" aria-label="Ритуалы дня"><button class="ritual morning" data-act="flow" data-id="morning">' + (mDone ? '<span class="done" role="img" aria-label="готово">✓</span>' : '') + ICON.sun + '<span><span class="r-title">Утро</span><small>Подготовка к дню</small></span></button><button class="ritual evening" data-act="flow" data-id="evening">' + (eDone ? '<span class="done" role="img" aria-label="готово">✓</span>' : '') + ICON.moon + '<span><span class="r-title">Вечер</span><small>Разбор дня</small></span></button></section>';
+  }
+  if (id === 'exercise'){ const focus = todaysFocus(); const ex = focus || exerciseOfDay(); const done = t.some(e => e.kind === 'exercise' && e.exId === ex.id); return '<div class="card"><span class="card-k">' + (focus ? 'Упражнение, выбранное утром' : 'Упражнение дня') + (done ? ', сделано' : '') + '</span>' + exRow(ex) + '</div>'; }
+  if (id === 'experiments'){
+    const act = state.exps.filter(e => e.status === 'active');
+    if (!act.length) return '<button class="card tap" data-act="gotoexp"><span class="card-k">Стоический эксперимент</span><span class="card-t">Начать отказ или привычку</span><span class="card-s">Таймер, календарь и опыт за каждый день в зачет</span></button>';
+    return act.slice(0, 3).map(e => expCard(e, true)).join('') + (act.length > 3 ? '<button class="card tap" data-act="gotoexp"><span class="card-s">Еще ' + (act.length - 3) + ' в разделе экспериментов</span></button>' : '');
+  }
+  if (id === 'time') return '<div class="card">' + timeCard() + '</div>';
+  if (id === 'weak'){ const weak = weakestVirtue(); if (!weak) return ''; const list = exercisesFor(weak.sub.map(x => x.id)).filter(e => !e.flow); const pick = list[dayIdx() % list.length]; return '<div class="card"><span class="card-k">Слабее всего за 30 дней: <span class="tx-' + weak.id + '">' + esc(weak.name.toLowerCase()) + '</span></span>' + exRow(pick) + '</div>'; }
+  if (id === 'principle'){ const pr = principleOfDay(); return pr ? '<div class="card"><span class="card-k">Принцип дня</span><p class="principle">' + esc(pr) + '</p></div>' : ''; }
+  if (id === 'reading'){ const last = state.books.slice().sort((a, b) => (b.openedAt || 0) - (a.openedAt || 0)).find(b => b.openedAt); if (!last) return ''; const p = bookProgress(last); return '<button class="card tap" data-act="ropen" data-id="' + last.id + '"><span class="card-k">Продолжить чтение</span><span class="card-t">' + esc(last.title) + '</span><span class="pbar"><i style="width:' + p + '%"></i></span><span class="card-s">' + p + '% прочитано' + (last.author ? ', ' + esc(last.author) : '') + '</span></button>'; }
+  if (id === 'word'){
+    if (!state.dict.length) return '';
+    const w = state.dict[(dayIdx() * 13 + (state.wordSeed || 0)) % state.dict.length];
+    return '<button class="card tap" data-act="wordflip"><span class="card-k">Слово из словаря, нажми, чтобы ' + (state.wordShown ? 'скрыть' : 'вспомнить') + '</span><span class="wordcard-t" lang="en">' + esc(w.term) + '</span><span class="wordcard-a">' + (state.wordShown ? esc(w.tr || w.def || 'перевод не записан') : '<span class="hidden-ans">Что это значит?</span>') + '</span></button>';
+  }
+  return '';
+}
+function renderToday(){
+  const conf = homeConf();
+  const parts = conf.order.filter(id => !conf.off.has(id)).map(widgetHtml).filter(Boolean);
+  return '<header class="home-top"><div><div class="brand">Портик</div><div class="date">' + esc(fmtDate(new Date())) + '</div></div><button class="iconbtn" data-act="homeconf" aria-label="Настроить экран">' + ICON.gear + '</button></header>'
+    + (parts.length ? parts.join('') : '<p class="empty">Все виджеты выключены. Нажми на шестеренку, чтобы вернуть.</p>');
+}
+function homeConfBody(s){
+  const conf = homeConf();
+  const st = timeStats();
+  const wq = 'w.html?t=quote', we = 'w.html?t=exercise';
+  const wl = st.hasBirth ? 'w.html?t=life&birth=' + encodeURIComponent(state.time.birth) + '&life=' + state.time.lifeYears + '&wake=' + state.time.wakeHours + '&min=' + Math.round(st.W) : '';
+  const wm = st.hasBirth ? 'w.html?t=memento&birth=' + encodeURIComponent(state.time.birth) + '&life=' + state.time.lifeYears : '';
+  return '<p class="kicker">Сегодня</p><h1 class="s-title">Виджеты</h1><p class="s-hint">Что показывать на главной и в каком порядке.</p>'
+    + '<div>' + conf.order.map((id, i) => { const w = HOME_WIDGETS.find(x => x.id === id); const on = !conf.off.has(id); return '<div class="hrow"><span class="hn' + (on ? '' : ' off') + '">' + esc(w.name) + '</span><button data-act="homeon" data-id="' + id + '" aria-pressed="' + on + '" aria-label="Показывать">' + (on ? 'вкл' : 'выкл') + '</button><button data-act="homeup" data-id="' + id + '" aria-label="Выше"' + (i === 0 ? ' disabled' : '') + '>↑</button><button data-act="homedown" data-id="' + id + '" aria-label="Ниже"' + (i === conf.order.length - 1 ? ' disabled' : '') + '>↓</button></div>'; }).join('') + '</div>'
+    + '<p class="s-h">Иконки на экран «Домой»</p><p class="s-hint">Настоящих виджетов у веб-приложений на айфоне нет, зато можно вынести отдельные экраны как иконки. Открой нужный, потом «Поделиться» и «На экран Домой». У такой иконки свое хранилище, поэтому туда идет только то, что не меняется: цитата и упражнение дня считаются от даты, а время и возраст зашиты в ссылку.</p>'
+    + '<a class="wlink" href="' + wq + '" target="_blank" rel="noopener">Цитата дня<small>Одна цитата на экран, меняется раз в день</small></a>'
+    + '<a class="wlink" href="' + we + '" target="_blank" rel="noopener">Упражнение дня<small>Шаги практики, та же, что в Портике</small></a>'
+    + (wl ? '<a class="wlink" href="' + wl + '" target="_blank" rel="noopener">Жизнь в неделях<small>Сетка и возраст с твоими цифрами</small></a>' : '<span class="wlink" style="color:var(--stone)">Жизнь в неделях<small>Сначала задай дату рождения в карточке «Время»</small></span>')
+    + (wm ? '<a class="wlink" href="' + wm + '" target="_blank" rel="noopener">Memento mori<small>Сколько прожито и сколько впереди, в днях</small></a>' : '')
+    + '<p class="fine" style="margin-top:14px">Быстрые ссылки: открыть Портик сразу на утре или вечере можно по адресу с #morning или #evening в конце.</p>';
+}
+
+/* ---------- v3: dictionary page (library segment) ---------- */
+function dictState(){ return (state.sheet && state.sheet.mode === 'dict') ? state.sheet : state.dictView; }
+function renderDictPage(){ return dictBody(state.dictView); }
+function afterDictChange(){ renderMain(); if (state.sheet && state.sheet.mode === 'dict') renderSheet(true); }
+
 /* ---------- render: main ---------- */
 const $main = document.getElementById('main');
 const $tabs = document.getElementById('tabs');
@@ -1122,41 +2473,10 @@ function svChip(id){
   return '<button class="svchip" data-act="subvirtue" data-id="'+id+'"><span class="sw bg-'+v+'"></span>'+esc(s.name)+'</button>';
 }
 
-function renderToday(){
-  const q = quoteOfDay();
-  const t = entriesOn(today());
-  const mDone = t.some(e => e.kind === 'morning');
-  const eDone = t.some(e => e.kind === 'evening');
-  const s = streak();
-  const focus = todaysFocus();
-  const ex = focus || exerciseOfDay();
-  const pr = principleOfDay();
-  const exDoneToday = t.some(e => e.kind === 'exercise' && e.exId === ex.id);
-  const weak = weakestVirtue();
-  let weakHtml = '';
-  if (weak){
-    const list = exercisesFor(weak.sub.map(x => x.id)).filter(e => !e.flow);
-    const pick = list[dayIdx() % list.length];
-    weakHtml = '<section class="block"><div class="block-title">Слабее всего за 30 дней: <span class="tx-'+weak.id+'">'+esc(weak.name.toLowerCase())+'</span></div>'+exRow(pick)+'</section>';
-  }
-  return ''
-    + '<header class="top"><div><div class="brand">Портик</div><div class="date">'+esc(fmtDate(new Date()))+'</div></div>'
-    + '<div class="streak"><b>'+s+'</b><span>'+plural(s,'день подряд','дня подряд','дней подряд')+'</span></div></header>'
-    + '<figure class="inscription" style="margin-left:0;margin-right:0"><p>'+esc(q.t)+'</p><cite>'+esc(q.r)+'</cite></figure>'
-    + '<section class="rituals" aria-label="Ритуалы дня">'
-    +   '<button class="ritual morning" data-act="flow" data-id="morning">'+(mDone?'<span class="done" role="img" aria-label="готово">✓</span>':'')+ICON.sun+'<span><span class="r-title">Утро</span><small>Подготовка к дню</small></span></button>'
-    +   '<button class="ritual evening" data-act="flow" data-id="evening">'+(eDone?'<span class="done" role="img" aria-label="готово">✓</span>':'')+ICON.moon+'<span><span class="r-title">Вечер</span><small>Разбор дня</small></span></button>'
-    + '</section>'
-    + timeCard()
-    + '<section class="block"><div class="block-title">'+(focus?'Упражнение, выбранное утром':'Упражнение дня')+(exDoneToday?', сделано':'')+'</div>'+exRow(ex)+'</section>'
-    + weakHtml
-    + (pr ? '<section class="block"><div class="block-title">Принцип дня</div><p class="principle">'+esc(pr)+'</p></section>' : '');
-}
-
 function renderPractice(){
   const srcChips = [['all','Все']].concat(Object.keys(SRC).map(k => [k, SRC[k].name]));
   const list = EX.filter(e => (state.src === 'all' || e.src === state.src) && (state.disc.size === 0 || e.disc.some(d => state.disc.has(d))));
-  let html = '<header class="page-head"><h1>Практика</h1><p>Античные упражнения, упражнения Пильюччи и практики по мотивам «Нового стоицизма» Беккера.</p></header>'
+  let html = '<p class=\"sec-note\">Античные упражнения, упражнения Пильюччи и практики по мотивам «Нового стоицизма» Беккера.</p>'
     + '<div class="chips" role="group" aria-label="Источник">'+srcChips.map(([k,l]) => '<button class="chip" data-act="src" data-id="'+k+'" aria-pressed="'+(state.src===k)+'">'+esc(l)+'</button>').join('')+'</div>'
     + '<div class="chips" role="group" aria-label="Дисциплина">'+[1,2,3].map(n => '<button class="chip" data-act="disc" data-id="'+n+'" aria-pressed="'+state.disc.has(n)+'"><span class="n">'+DISC[n].n+'</span>'+DISC[n].name+'</button>').join('')+'</div>';
   if (!list.length) return html + '<p class="empty">Под эти фильтры ничего не подходит. Сними один из них.</p>';
@@ -1203,7 +2523,7 @@ function renderVirtue(){
     const share = p.total ? Math.round(p.v[v.id] / p.total * 100) : 0;
     return '<button class="bar-row" data-act="virtue" data-id="'+v.id+'"><span class="bar-name"><span class="sw bg-'+v.id+'"></span>'+esc(v.name)+'</span><span class="bar-track"><span class="bar-fill bg-'+v.id+'" style="width:'+share+'%"></span></span><span class="bar-val">'+share+'%</span></button>';
   }).join('');
-  return '<header class="page-head"><h1>Добродетель</h1><p>Для стоиков добродетель одна: верное отношение ко всему. У нее четыре грани и восемнадцать составляющих, по Арию Дидиму. Беккер сохраняет это единство и понимает добродетель как совершенство способности действовать.</p></header>'
+  return '<p class=\"sec-note\">Для стоиков добродетель одна: верное отношение ко всему. У нее четыре грани и восемнадцать составляющих, по Арию Дидиму. Беккер сохраняет это единство и понимает добродетель как совершенство способности действовать.</p>'
     + '<section class="panel" aria-label="Развитие добродетелей">'
     +   '<div class="panel-head"><div class="seg" role="group" aria-label="Детализация"><button data-act="vmode" data-id="virtues" aria-pressed="'+(state.vMode==='virtues')+'">Грани</button><button data-act="vmode" data-id="parts" aria-pressed="'+(state.vMode==='parts')+'">Составляющие</button></div>'
     +   '<div class="seg" role="group" aria-label="Период"><button data-act="vwin" data-id="30" aria-pressed="'+(state.vWindow===30)+'">30 дней</button><button data-act="vwin" data-id="0" aria-pressed="'+(state.vWindow===0)+'">Все время</button></div></div>'
@@ -1220,7 +2540,7 @@ function renderVirtue(){
 }
 
 function renderTeaching(){
-  return '<header class="page-head"><h1>Учение</h1><p>Основоположения стоиков, перечитанные по методу Беккера: что отбросить, что сохранить и на какие факты сегодня опереться.</p></header>'
+  return '<p class=\"sec-note\">Основоположения стоиков, перечитанные по методу Беккера: что отбросить, что сохранить и на какие факты сегодня опереться.</p>'
     + '<div>'+DOCTRINES.map(d => '<button class="doc-row" data-act="doctrine" data-id="'+d.id+'"><span><span class="doc-title">'+esc(d.title)+'</span><span class="doc-short">'+esc(d.short)+'</span></span><span class="doc-term">'+esc(d.term)+'</span></button>').join('')+'</div>'
     + '<div class="spacer"></div>'
     + '<h2 class="sec-title">Моя цитадель</h2><p class="sec-note">Ум, свободный от страстей, это крепость. Здесь мои принципы: к ним возвращаюсь утром, вечером и когда штормит.</p>'
@@ -1245,7 +2565,7 @@ function renderTeaching(){
 function entryIcon(e){ return e.kind === 'morning' ? ICON.sun : e.kind === 'evening' ? ICON.moon : e.kind === 'rating' ? ICON.radar : ICON.dot; }
 function journalInner(){
   const s = streak(); const total = state.entries.length;
-  let html = '<header class="page-head"><h1>Дневник</h1></header>'
+  let html = ''
     + '<div class="stats"><div><b>'+s+'</b><span>'+plural(s,'день подряд','дня подряд','дней подряд')+'</span></div><div><b>'+total+'</b><span>'+plural(total,'запись','записи','записей')+'</span></div></div>';
   if (!total) return html + '<p class="empty">Пока пусто. Начни с утренней подготовки или любого упражнения: записи появятся здесь.</p>';
   const byDay = {};
@@ -1277,7 +2597,7 @@ function renderJournal(){
     + '<input type="file" id="import-file" accept="application/json,.json" hidden>';
 }
 function exportData(){
-  const data = { app:'portik', version:1, exportedAt: new Date().toISOString(), entries: state.entries, principles: state.principles, time: state.time };
+  const data = { app:'portik', version:2, exportedAt: new Date().toISOString(), entries: state.entries, principles: state.principles, time: state.time, dict: state.dict, books: state.books, readerPrefs: state.rprefs, exps: state.exps, home: state.home };
   const name = 'portik-' + today() + '.json';
   const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
   let file = null; try { file = new File([blob], name, { type:'application/json' }); } catch(e){}
@@ -1298,6 +2618,22 @@ async function importFile(file){
   let added = 0;
   (Array.isArray(data.entries) ? data.entries : []).forEach(e => { if (e && e.id && e.createdAt && !map.has(e.id)){ map.set(e.id, e); added++; } });
   if (Array.isArray(data.principles) && data.principles.length){ state.principles = data.principles.map(String); state.principlesDirty = false; await store.savePrinciples(state.principles); }
+  if (Array.isArray(data.dict)){
+    const have = new Set(state.dict.map(w => w.id)), terms = new Set(state.dict.map(w => w.term.toLowerCase()));
+    data.dict.forEach(w => { if (w && w.id && w.term && !have.has(w.id) && !terms.has(w.term.toLowerCase())) state.dict.push(w); });
+    saveDict();
+  }
+  if (Array.isArray(data.books)){
+    data.books.forEach(b => { const m = state.books.find(x => x.id === b.id); if (!m) return; if (b.pos && (b.openedAt || 0) > (m.openedAt || 0)){ m.pos = b.pos; m.openedAt = b.openedAt; } if (b.pair && !m.pair && state.books.some(x => x.id === b.pair.id)) m.pair = b.pair; });
+    saveBooks();
+  }
+  if (Array.isArray(data.exps)){
+    const have = new Set(state.exps.map(e => e.id));
+    data.exps.forEach(e => { if (e && e.id && !have.has(e.id)) state.exps.push(e); else if (e && e.id){ const m = state.exps.find(x => x.id === e.id); if (m && e.days) m.days = Object.assign({}, e.days, m.days); } });
+    saveExps();
+  }
+  if (data.home && typeof data.home === 'object'){ state.home = data.home; lsSet(LS_HOME, state.home); }
+  if (data.readerPrefs && typeof data.readerPrefs === 'object'){ state.rprefs = Object.assign({}, state.rprefs, data.readerPrefs); saveRPrefs(); }
   if (data.time && typeof data.time === 'object'){
     const t = data.time, log = Object.assign({}, state.time.log);
     Object.keys(t.log || {}).forEach(k => { log[k] = Object.assign({}, log[k] || {}, t.log[k]); });
@@ -1313,8 +2649,16 @@ async function importFile(file){
 
 function renderMain(){
   renderTabs();
-  const views = { today: renderToday, practice: renderPractice, virtue: renderVirtue, teaching: renderTeaching, journal: renderJournal };
-  $main.innerHTML = views[state.tab]();
+  const tab = TABS.find(t => t.id === state.tab) || TABS[0];
+  let body = '';
+  if (tab.id === 'today') body = renderToday();
+  else {
+    const seg = tab.segs ? (tab.segs.some(x => x[0] === state.sub[tab.id]) ? state.sub[tab.id] : tab.segs[0][0]) : '';
+    const head = '<header class="page-head"><h1>' + tab.label + '</h1>' + (tab.segs ? '<div class="segbar" role="tablist">' + tab.segs.map(([k, l]) => '<button role="tab" data-act="seg" data-id="' + tab.id + ':' + k + '" aria-pressed="' + (seg === k) + '">' + l + '</button>').join('') + '</div>' : '') + '</header>';
+    const views = { 'practice:ex': renderPractice, 'practice:exp': renderExperiments, 'growth:virtue': renderVirtue, 'growth:progress': renderProgress, 'library:teaching': renderTeaching, 'library:books': renderRead, 'library:dict': renderDictPage, 'journal:': renderJournal };
+    body = head + (views[tab.id + ':' + seg] || (() => ''))();
+  }
+  $main.innerHTML = body;
   $main.querySelectorAll('textarea').forEach(autosize);
 }
 
@@ -1490,6 +2834,10 @@ function sheetBody(s){
     return { aria: d.title, body };
   }
   if (s.mode === 'time') return { aria:'Учет времени', body: timeBody(s) };
+  if (s.mode === 'home') return { aria:'Виджеты', body: homeConfBody(s) };
+  if (s.mode === 'expnew') return { aria:'Новый эксперимент', body: expNewBody(s), foot:'<button class="next" data-act="expstart">Начать</button>' };
+  if (s.mode === 'exp') return { aria:'Эксперимент', body: expDetailBody(s) };
+  if (s.mode === 'dict') return { aria:'Словарь', body: dictBody(s) };
   if (s.mode === 'rating'){
     const body = '<p class="kicker">Самооценка</p><h1 class="s-title">Как я сейчас</h1>'
       + '<p class="s-idea">Честно, без скромности и без бравады. Это вторая линия на паутине: сравнить, что тренирую и как себя вижу. Раз в неделю или две достаточно.</p>'
@@ -1572,6 +2920,7 @@ function toast(msg){
 }
 
 /* ---------- events ---------- */
+const READER_ACTS = new Set(['ropen','rclose','rnext','rprev','rgoto','rtoc','rset','rpclose','rpsave','rpremove','rselword','rptheme','rpsize','rpfont','rplh','rpmargin','rpjust','rplang','rsplit','rpsplit','rpoff','rpflip']);
 async function onAct(b){
   const act = b.dataset.act, id = b.dataset.id;
   if (act === 'tab'){ state.tab = id; state.confirmDel = null; renderMain(); window.scrollTo(0,0); return; }
@@ -1586,6 +2935,78 @@ async function onAct(b){
     return pushSheet({ mode:'rating', theme:'t-page', values });
   }
   if (act === 'saverate') return saveRating();
+  if (READER_ACTS.has(act)) return onReaderAct(act, id);
+  if (act === 'bookadd'){ const f = document.getElementById('book-file'); if (f) f.click(); return; }
+  if (act === 'bookdel'){
+    if (state.confirmBook !== id){ state.confirmBook = id; return renderMain(); }
+    state.confirmBook = null;
+    try { await IDB.del(id); } catch(e){}
+    state.books = state.books.filter(b => b.id !== id); state.books.forEach(b => { if (b.pair && b.pair.id === id) delete b.pair; }); saveBooks(); toast('Книга удалена'); return renderMain();
+  }
+  if (act === 'pairlink'){
+    const a = (document.getElementById('pair-a') || {}).value, b2 = (document.getElementById('pair-b') || {}).value;
+    if (!a || !b2 || a === b2){ toast('Выбери две разные книги'); return; }
+    const m = state.books.find(x => x.id === a); if (!m) return;
+    state.books.forEach(x => { if (x.pair && (x.pair.id === a || x.pair.id === b2 || x.id === b2)) delete x.pair; });
+    m.pair = { id: b2, offset: 0 }; saveBooks(); toast('Связано. В читалке появится кнопка параллельного текста'); return renderMain();
+  }
+  if (act === 'pairbreak'){ const m = state.books.find(x => x.id === id); if (m) delete m.pair; saveBooks(); return renderMain(); }
+  if (act === 'dictopen') return pushSheet({ mode:'dict', theme:'t-page', q:'', open:null });
+  if (act === 'dword'){ const ds = dictState(); ds.open = ds.open === id ? null : id; ds.confirmDel = null; return afterDictChange(); }
+  if (act === 'dwsave'){
+    const w = state.dict.find(x => x.id === id); if (!w) return;
+    const t = (document.getElementById('dw-term') || {}).value, tr = (document.getElementById('dw-tr') || {}).value;
+    if (t && t.trim()) w.term = t.trim();
+    w.tr = (tr || '').trim(); saveDict(); dictState().open = null; toast('Сохранено'); return afterDictChange();
+  }
+  if (act === 'dwdel'){
+    const ds = dictState();
+    if (ds.confirmDel !== id){ ds.confirmDel = id; return afterDictChange(); }
+    state.dict = state.dict.filter(x => x.id !== id); saveDict(); ds.open = null; ds.confirmDel = null; return afterDictChange();
+  }
+  if (act === 'seg'){ const [t, k] = id.split(':'); state.sub[t] = k; lsSet(LS_SUB, state.sub); renderMain(); window.scrollTo(0, 0); return; }
+  if (act === 'homeconf') return pushSheet({ mode:'home', theme:'t-page' });
+  if (act === 'homeon' || act === 'homeup' || act === 'homedown'){
+    const c = homeConf();
+    if (act === 'homeon'){ if (c.off.has(id)) c.off.delete(id); else c.off.add(id); }
+    else { const i = c.order.indexOf(id), j = act === 'homeup' ? i - 1 : i + 1; if (i >= 0 && j >= 0 && j < c.order.length){ const tmp = c.order[i]; c.order[i] = c.order[j]; c.order[j] = tmp; } }
+    saveHome(c); renderMain(); return renderSheet(true);
+  }
+  if (act === 'wordflip'){ state.wordShown = !state.wordShown; return renderMain(); }
+  if (act === 'gotoexp'){ state.tab = 'practice'; state.sub.practice = 'exp'; lsSet(LS_SUB, state.sub); renderMain(); window.scrollTo(0, 0); return; }
+  if (act === 'progress'){ state.tab = 'growth'; state.sub.growth = 'progress'; lsSet(LS_SUB, state.sub); renderMain(); window.scrollTo(0, 0); return; }
+  if (act === 'expnew') return pushSheet({ mode:'expnew', theme:'t-page', title:'', type:'avoid', target:7, why:'' });
+  if (act === 'exppreset'){ const i = id.lastIndexOf('|'); state.sheet.title = id.slice(0, i); state.sheet.type = id.slice(i + 1); return renderSheet(true); }
+  if (act === 'exptype'){ state.sheet.type = id; return renderSheet(true); }
+  if (act === 'exptarget'){ state.sheet.target = Number(id); return renderSheet(true); }
+  if (act === 'expstart'){
+    const sh = state.sheet; const title = (((document.getElementById('exp-title') || {}).value) || sh.title || '').trim();
+    if (!title){ toast('Нужно название'); return; }
+    const why = (((document.getElementById('exp-why') || {}).value) || sh.why || '').trim();
+    const now = Date.now();
+    state.exps.unshift({ id:'x' + now.toString(36) + Math.random().toString(36).slice(2, 5), title: title.slice(0, 60), type: sh.type === 'do' ? 'do' : 'avoid', target: sh.target || 0, why, createdAt: now, startAt: now, lastFail: null, status:'active', days:{} });
+    saveExps(); closeAll(); state.tab = 'practice'; state.sub.practice = 'exp'; lsSet(LS_SUB, state.sub); renderMain(); window.scrollTo(0, 0); toast('Эксперимент начат. Срыв это не конец, а данные'); return;
+  }
+  if (act === 'expopen') return pushSheet({ mode:'exp', theme:'t-page', id });
+  if (act === 'expmark'){
+    const i = id.lastIndexOf(':'), eid = id.slice(0, i), v = id.slice(i + 1); const e = expById(eid); if (!e) return;
+    e.days = e.days || {}; const k = today();
+    if (e.days[k] === v) delete e.days[k]; else e.days[k] = v;
+    if (e.type === 'avoid'){ if (e.days[k] === 'fail') e.lastFail = Date.now(); else if (v === 'fail') e.lastFail = lastFailFromDays(e); }
+    if (e.target && e.status === 'active' && expProgress(e) >= 1){ e.status = 'done'; e.endedAt = Date.now(); toast('Цель достигнута, +50 XP'); }
+    saveExps(); renderMain(); if (state.sheet && state.sheet.mode === 'exp') renderSheet(true); return;
+  }
+  if (act === 'expfinish'){ const e = expById(id); if (e){ e.status = 'done'; e.endedAt = Date.now(); saveExps(); toast('Завершен, +50 XP'); } renderMain(); return renderSheet(true); }
+  if (act === 'expstop'){ const e = expById(id); if (e){ e.status = 'stopped'; e.endedAt = Date.now(); saveExps(); } renderMain(); return renderSheet(true); }
+  if (act === 'expresume'){ const e = expById(id); if (e){ e.status = 'active'; delete e.endedAt; saveExps(); } renderMain(); return renderSheet(true); }
+  if (act === 'expdel'){ if (!state.sheet.confirmDel){ state.sheet.confirmDel = true; return renderSheet(true); } state.exps = state.exps.filter(x => x.id !== id); saveExps(); closeAll(); return renderMain(); }
+  if (act === 'dictquizlet'){ const ok = await copyText(dictTsv()); toast(ok ? 'Скопировано. В Quizlet: Создать модуль → Импорт → вставить' : 'Не получилось скопировать'); return; }
+  if (act === 'dictcsv'){
+    const q = v => '"' + String(v || '').replace(/"/g, '""') + '"';
+    const rows = [['term','translation','definition','context','book','added']].concat(state.dict.map(w => [w.term, w.tr, w.def, w.ctx, w.bookTitle, new Date(w.addedAt).toISOString().slice(0, 10)]));
+    downloadFile('portik-dictionary-' + today() + '.csv', '\ufeff' + rows.map(r => r.map(q).join(',')).join('\n'), 'text/csv');
+    return;
+  }
   if (act === 'export') return exportData();
   if (act === 'import'){ const f = document.getElementById('import-file'); if (f) f.click(); return; }
   if (act === 'time') return pushSheet({ mode:'time', theme:'t-page', edit:false });
@@ -1662,6 +3083,7 @@ async function onAct(b){
 }
 document.addEventListener('click', ev => { const b = ev.target.closest('[data-act]'); if (b) onAct(b); });
 document.addEventListener('keydown', ev => {
+  if (ev.key === 'Escape' && state.reader){ if (state.reader.panel) closeRPanel(); else closeReader(); return; }
   if (ev.key === 'Escape' && state.sheet) return closeSheet();
   if (ev.key === 'Enter' && ev.target && ev.target.id === 'sink-name'){ ev.preventDefault(); return onAct({ dataset:{ act:'sinkadd' } }); }
   const t = ev.target;
@@ -1679,6 +3101,13 @@ document.addEventListener('input', ev => {
     const o = document.getElementById('out-' + el.dataset.rate); if (o) o.textContent = el.value;
   }
   if (el.dataset.pr !== undefined){ state.principles[Number(el.dataset.pr)] = el.value; state.principlesDirty = true; }
+  if (el.id === 'dsearch'){
+    const ds = dictState(); ds.q = el.value; const pos = el.selectionStart; afterDictChange();
+    const n = document.getElementById('dsearch'); if (n){ n.focus(); try { n.setSelectionRange(pos, pos); } catch(e){} }
+    return;
+  }
+  if (el.id === 'exp-title' && state.sheet){ state.sheet.title = el.value; return; }
+  if (el.id === 'exp-why' && state.sheet){ state.sheet.why = el.value; return; }
   if (el.id === 'cut'){
     state.time.cut = Number(el.value) / 100;
     const a = document.getElementById('cut-val'); if (a) a.textContent = el.value + '%';
@@ -1690,7 +3119,10 @@ document.addEventListener('input', ev => {
 document.addEventListener('change', ev => {
   const el = ev.target;
   if (el.id === 'pick' && state.sheet){ state.sheet.answers[el.dataset.key] = el.value; saveDraft(); renderSheet(); }
+  if (el.id === 'book-file' && el.files && el.files[0]){ const f = el.files[0]; el.value = ''; addBookFile(f); return; }
   if (el.id === 'import-file' && el.files && el.files[0]){ const f = el.files[0]; el.value = ''; importFile(f); return; }
+  if (el.id === 'pair-a'){ state.pairA = el.value; return; }
+  if (el.id === 'pair-b'){ state.pairB = el.value; return; }
   if (el.id === 't-birth'){
     const d = parseDate(el.value);
     if (d && d < new Date()){ state.time.birth = el.value; saveTime(); renderMain(); renderSheet(true); }
@@ -1702,6 +3134,8 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.se
 try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
 renderMain();
 store.connect();
+startExpTicker();
+if (hash === 'morning' || hash === 'evening') setTimeout(() => startFlow(hash), 50);
 })();
 </script>
 </body>

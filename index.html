@@ -949,7 +949,9 @@ const state = {
   sub: Object.assign({ practice:'ex', growth:'virtue', library:'teaching' }, lsGet('portik.v1.sub', {})),
   dictView: { q:'', open:null, confirmDel:null },
   wordShown: false,
-  wordSeed: 0
+  wordSeed: 0,
+  visits: lsGet('portik.v1.visits', { days:[], best:0 }),
+  showLevels: false
 };
 const TABS = [
   {id:'today', label:'Сегодня', icon:'today'},
@@ -2304,10 +2306,42 @@ function startExpTicker(){
 }
 
 /* ---------- v3: xp, levels, badges ---------- */
-const LEVELS = [[0,'Ученик'],[100,'Слушатель'],[250,'Продвигающийся'],[500,'Упражняющийся'],[900,'Стойкий'],[1500,'Невозмутимый'],[2400,'Гражданин мира'],[3600,'Хранитель цитадели'],[5200,'Почти мудрец'],[7500,'Мудрец, по слухам']];
+const LEVEL_NAMES = ['Новичок у Портика','Слушатель','Ученик','Прокоптон','Упражняющийся','Внимательный','Хозяин впечатлений','Рассудительный','Стойкий','Умеренный','Справедливый','Мужественный','Аскет','Невозмутимый','Следующий фактам','Друг Сенеки','Ученик Эпиктета','Собеседник Марка','Гражданин мира','Хранитель цитадели','Смотрящий сверху','Спокойный в буре','Свободный от страстей','Знающий меру','Хозяин времени','Почти мудрец','Мудрец, по слухам','Мудрец, по мнению друзей','Мудрец, по мнению Сенеки','Феникс'];
+const LEVELS = LEVEL_NAMES.map((n, i) => [i === 0 ? 0 : Math.round(40 * Math.pow(i, 1.7)), n]);
+/* visits: the streak that burns if you skip a day */
+const LS_VISITS = 'portik.v1.visits';
+function visitDays(){ return (state.visits && Array.isArray(state.visits.days)) ? state.visits.days : []; }
+function visitStreak(days){
+  const set = new Set(days || visitDays()); const d = new Date(); let n = 0;
+  if (!set.has(dayKey(d))) d.setDate(d.getDate() - 1);
+  while (set.has(dayKey(d))){ n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function bestVisitStreak(){
+  const days = visitDays().slice().sort(); let best = 0, cur = 0, prev = null;
+  days.forEach(k => { const d = parseDate(k); if (prev && Math.round((d - prev) / 86400000) === 1) cur++; else cur = 1; best = Math.max(best, cur); prev = d; });
+  return best;
+}
+function recordVisit(){
+  const v = state.visits = (state.visits && typeof state.visits === 'object') ? state.visits : { days:[], best:0 };
+  if (!Array.isArray(v.days)) v.days = [];
+  const k = today();
+  if (!v.days.includes(k)){
+    const before = v.days.length ? visitStreak(v.days.concat(dayKey(new Date(Date.now() - 86400000)))) : 0;
+    const prevLen = Number(v.last || 0);
+    v.days.push(k); v.days.sort();
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 400); const ck = dayKey(cutoff);
+    v.days = v.days.filter(d => d >= ck);
+    const now = visitStreak(v.days);
+    if (prevLen > 1 && now === 1) v.burned = prevLen; else v.burned = 0;
+    v.last = now; v.best = Math.max(Number(v.best || 0), now, bestVisitStreak());
+    lsSet(LS_VISITS, v);
+    if (v.burned) setTimeout(() => toast('Серия из ' + v.burned + ' ' + plural(v.burned, 'дня', 'дней', 'дней') + ' сгорела. Начинаем заново, без драмы'), 600);
+  }
+}
 function weekKey(ms){ const d = new Date(ms); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow); return dayKey(d); }
 function xpData(){
-  const parts = { morning:0, evening:0, exercise:0, rating:0, exp:0, words:0, books:0, time:0 };
+  const parts = { morning:0, evening:0, exercise:0, rating:0, exp:0, words:0, books:0, time:0, visits:0 };
   const weeks = {};
   const add = (k, v, ms) => { parts[k] += v; if (ms){ const w = weekKey(ms); weeks[w] = (weeks[w] || 0) + v; } };
   state.entries.forEach(e => {
@@ -2323,6 +2357,7 @@ function xpData(){
   state.dict.forEach(w => add('words', 2, w.addedAt));
   state.books.forEach(b => { const p = bookProgress(b); if (p > 0) add('books', Math.round(p / 5), b.openedAt || b.addedAt); });
   Object.keys(state.time.log || {}).forEach(k => { if (sumObj(state.time.log[k]) > 0){ const d = parseDate(k); add('time', 1, d ? d.getTime() : 0); } });
+  visitDays().forEach(k => { const d = parseDate(k); add('visits', 2, d ? d.getTime() : 0); });
   const total = Object.values(parts).reduce((a, b) => a + b, 0);
   let li = 0; for (let i = 0; i < LEVELS.length; i++) if (total >= LEVELS[i][0]) li = i;
   const next = LEVELS[li + 1] ? LEVELS[li + 1][0] : null;
@@ -2334,13 +2369,15 @@ function levelRing(x, size){
   return '<svg class="ring" viewBox="0 0 72 72" role="img" aria-label="Уровень ' + x.level + '"><circle class="bg" cx="36" cy="36" r="' + r + '"/><circle class="fg" cx="36" cy="36" r="' + r + '" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '" transform="rotate(-90 36 36)"/><text x="36" y="45" text-anchor="middle">' + x.level + '</text></svg>';
 }
 function levelCard(){
-  const x = xpData(), s = streak();
-  return '<button class="card tap" data-act="progress"><div class="lvl">' + levelRing(x) + '<div><div class="lvl-name">' + esc(x.name) + '</div><div class="lvl-sub">' + x.total + ' XP' + (x.next ? ', до следующего уровня ' + (x.next - x.total) : ', потолок, дальше только практика') + '</div><span class="xpbar"><i style="width:' + Math.round(x.frac * 100) + '%"></i></span><div class="lvl-foot"><span>' + s + ' ' + plural(s, 'день подряд', 'дня подряд', 'дней подряд') + '</span><span>уровень ' + x.level + ' из ' + LEVELS.length + '</span></div></div></div></button>';
+  const x = xpData(), vs = visitStreak(), best = Math.max(bestVisitStreak(), Number((state.visits || {}).best || 0));
+  return '<button class="card tap" data-act="progress"><div class="lvl">' + levelRing(x) + '<div><div class="lvl-name">' + esc(x.name) + '</div><div class="lvl-sub">' + x.total + ' XP, уровень ' + x.level + ' из ' + LEVELS.length + (x.next ? ', до следующего ' + (x.next - x.total) : ', потолок') + '</div><span class="xpbar"><i style="width:' + Math.round(x.frac * 100) + '%"></i></span><div class="lvl-foot"><span>серия ' + vs + ' ' + plural(vs, 'день', 'дня', 'дней') + (best > vs ? ', лучшая ' + best : '') + '</span><span>' + (vs > 0 ? 'сгорит, если пропустить день' : 'начинается сегодня') + '</span></div></div></div></button>';
 }
 const BADGES = [
   { id:'first', n:'Первый шаг', d:'Первая запись в дневнике', ok: () => state.entries.some(e => e.kind !== 'rating') },
-  { id:'week', n:'Семь дней', d:'Неделя подряд', ok: () => streak() >= 7 },
-  { id:'month', n:'Месяц', d:'30 дней подряд', ok: () => streak() >= 30 },
+  { id:'week', n:'Семь дней', d:'Неделя подряд в Портике', ok: () => Math.max(visitStreak(), bestVisitStreak()) >= 7 },
+  { id:'month', n:'Месяц', d:'30 дней подряд в Портике', ok: () => Math.max(visitStreak(), bestVisitStreak()) >= 30 },
+  { id:'hundred', n:'Сто дней', d:'100 дней подряд в Портике', ok: () => Math.max(visitStreak(), bestVisitStreak()) >= 100 },
+  { id:'practice7', n:'Неделя практики', d:'7 дней подряд с записью в дневнике', ok: () => streak() >= 7 },
   { id:'judge', n:'Вечерний судья', d:'10 вечерних разборов', ok: () => state.entries.filter(e => e.kind === 'evening').length >= 10 },
   { id:'dawn', n:'Утренний страж', d:'10 утренних подготовок', ok: () => state.entries.filter(e => e.kind === 'morning').length >= 10 },
   { id:'faces', n:'Четыре грани', d:'Практика по всем граням добродетели', ok: () => { const p = practice(0); return VIRT.every(v => p.v[v.id] > 0); } },
@@ -2374,16 +2411,20 @@ function renderProgress(){
   const labels = wk.map((k, i) => (i % 2 === 0 || i === wk.length - 1) ? k.slice(8, 10) + '.' + k.slice(5, 7) : '');
   const xpVals = wk.map(k => x.weeks[k] || 0);
   const expVals = wk.map(k => state.exps.reduce((a, e) => a + Object.keys(e.days || {}).filter(d => e.days[d] === 'ok' && weekKey(parseDate(d).getTime()) === k).length, 0));
-  const names = { morning:'Утренние подготовки', evening:'Вечерние разборы', exercise:'Упражнения', rating:'Самооценки', exp:'Эксперименты', words:'Слова в словаре', books:'Чтение', time:'Учет времени' };
+  const names = { visits:'Дни в Портике', morning:'Утренние подготовки', evening:'Вечерние разборы', exercise:'Упражнения', rating:'Самооценки', exp:'Эксперименты', words:'Слова в словаре', books:'Чтение', time:'Учет времени' };
   const earned = BADGES.filter(b => b.ok()), locked = BADGES.filter(b => !b.ok());
+  const vs = visitStreak(), best = Math.max(bestVisitStreak(), Number((state.visits || {}).best || 0)), ps = streak(), vd = visitDays().length;
+  const lvlRows = state.showLevels ? LEVELS : LEVELS.filter((l, i) => Math.abs(i + 1 - x.level) <= 2 || i === LEVELS.length - 1);
   return levelCard()
-    + '<p class="sec-note" style="margin-top:4px">Опыт считается из того, что уже есть в дневнике, экспериментах и словаре. Ничего отдельно не копится, нечему потеряться.</p>'
+    + '<div class="stat4"><div><b>' + vs + '</b><span>' + plural(vs, 'день подряд', 'дня подряд', 'дней подряд') + '</span></div><div><b>' + best + '</b><span>лучшая серия</span></div><div><b>' + ps + '</b><span>' + plural(ps, 'день', 'дня', 'дней') + ' практики подряд</span></div><div><b>' + vd + '</b><span>' + plural(vd, 'день', 'дня', 'дней') + ' в Портике всего</span></div></div>'
+    + '<p class="sec-note" style="margin-top:4px">Серия растет, пока заходишь каждый день, и сгорает, если пропустить хотя бы один. Опыт считается из того, что уже есть в дневнике, экспериментах, словаре и чтении. Ничего отдельно не копится, нечему потеряться.</p>'
     + '<h2 class="sec-title">Опыт по неделям</h2>' + barsSvg(xpVals, labels, '')
     + '<h2 class="sec-title" style="margin-top:18px">Эксперименты: дни в зачет</h2>' + barsSvg(expVals, labels, 'exp')
     + '<h2 class="sec-title" style="margin-top:18px">Из чего сложилось</h2><ul class="xp-list">' + Object.keys(names).map(k => '<li><span>' + names[k] + '</span><b>' + x.parts[k] + ' XP</b></li>').join('') + '</ul>'
     + '<h2 class="sec-title">Достижения</h2><p class="sec-note">' + earned.length + ' из ' + BADGES.length + '</p>'
     + '<div class="badges">' + earned.map(b => '<div class="badge"><div class="bi">' + roman(BADGES.indexOf(b) + 1) + '</div><span class="bn">' + esc(b.n) + '</span><span class="bd">' + esc(b.d) + '</span></div>').join('') + locked.map(b => '<div class="badge locked"><div class="bi">' + roman(BADGES.indexOf(b) + 1) + '</div><span class="bn">' + esc(b.n) + '</span><span class="bd">' + esc(b.d) + '</span></div>').join('') + '</div>'
-    + '<h2 class="sec-title">Уровни</h2><ul class="xp-list">' + LEVELS.map((l, i) => '<li' + (i + 1 === x.level ? ' style="color:var(--ink);font-weight:600"' : '') + '><span>' + (i + 1) + '. ' + l[1] + '</span><b>' + l[0] + ' XP</b></li>').join('') + '</ul>';
+    + '<h2 class="sec-title">Уровни</h2><p class="sec-note">' + LEVELS.length + ' уровней, от новичка до феникса: Сенека писал, что мудрец рождается раз в пятьсот лет, как феникс.</p><ul class="xp-list">' + lvlRows.map(l => { const i = LEVELS.indexOf(l); return '<li' + (i + 1 === x.level ? ' style="color:var(--ink);font-weight:600"' : '') + '><span>' + (i + 1) + '. ' + l[1] + '</span><b>' + l[0] + ' XP</b></li>'; }).join('') + '</ul>'
+    + '<button class="btn ghost small" data-act="levelsall">' + (state.showLevels ? 'Скрыть' : 'Показать все уровни') + '</button><div class="spacer"></div>';
 }
 function roman(n){ const m = [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]; let s = ''; for (const [v, r] of m){ while (n >= v){ s += r; n -= v; } } return s; }
 
@@ -2597,7 +2638,7 @@ function renderJournal(){
     + '<input type="file" id="import-file" accept="application/json,.json" hidden>';
 }
 function exportData(){
-  const data = { app:'portik', version:2, exportedAt: new Date().toISOString(), entries: state.entries, principles: state.principles, time: state.time, dict: state.dict, books: state.books, readerPrefs: state.rprefs, exps: state.exps, home: state.home };
+  const data = { app:'portik', version:2, exportedAt: new Date().toISOString(), entries: state.entries, principles: state.principles, time: state.time, dict: state.dict, books: state.books, readerPrefs: state.rprefs, exps: state.exps, home: state.home, visits: state.visits };
   const name = 'portik-' + today() + '.json';
   const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
   let file = null; try { file = new File([blob], name, { type:'application/json' }); } catch(e){}
@@ -2633,6 +2674,10 @@ async function importFile(file){
     saveExps();
   }
   if (data.home && typeof data.home === 'object'){ state.home = data.home; lsSet(LS_HOME, state.home); }
+  if (data.visits && Array.isArray(data.visits.days)){
+    const v = state.visits = (state.visits && typeof state.visits === 'object') ? state.visits : { days:[], best:0 };
+    v.days = [...new Set((v.days || []).concat(data.visits.days))].sort(); v.best = Math.max(Number(v.best || 0), Number(data.visits.best || 0), bestVisitStreak()); lsSet(LS_VISITS, v);
+  }
   if (data.readerPrefs && typeof data.readerPrefs === 'object'){ state.rprefs = Object.assign({}, state.rprefs, data.readerPrefs); saveRPrefs(); }
   if (data.time && typeof data.time === 'object'){
     const t = data.time, log = Object.assign({}, state.time.log);
@@ -2973,6 +3018,7 @@ async function onAct(b){
     saveHome(c); renderMain(); return renderSheet(true);
   }
   if (act === 'wordflip'){ state.wordShown = !state.wordShown; return renderMain(); }
+  if (act === 'levelsall'){ state.showLevels = !state.showLevels; return renderMain(); }
   if (act === 'gotoexp'){ state.tab = 'practice'; state.sub.practice = 'exp'; lsSet(LS_SUB, state.sub); renderMain(); window.scrollTo(0, 0); return; }
   if (act === 'progress'){ state.tab = 'growth'; state.sub.growth = 'progress'; lsSet(LS_SUB, state.sub); renderMain(); window.scrollTo(0, 0); return; }
   if (act === 'expnew') return pushSheet({ mode:'expnew', theme:'t-page', title:'', type:'avoid', target:7, why:'' });
@@ -3132,9 +3178,11 @@ document.addEventListener('change', ev => {
 window.addEventListener('resize', () => { if (state.sheet && state.sheet.mode === 'time') drawLife(); });
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
+recordVisit();
 renderMain();
 store.connect();
 startExpTicker();
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !visitDays().includes(today())){ recordVisit(); renderMain(); } });
 if (hash === 'morning' || hash === 'evening') setTimeout(() => startFlow(hash), 50);
 })();
 </script>

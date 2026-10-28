@@ -421,6 +421,53 @@ const state = {
   theme: lsGet('portik.v1.theme', 'auto'),
   voyage: lsGet('portik.v1.voyage', { at:'portik', visited:[] })
 };
+/* ---------- data hygiene: битые или старые данные не должны ронять приложение ---------- */
+function sanitizeState(){
+  const arr = v => Array.isArray(v) ? v : [];
+  const obj = v => v && typeof v === 'object' && !Array.isArray(v);
+  const str = v => typeof v === 'string' ? v : (v == null ? '' : String(v));
+  const snap = () => JSON.stringify([state.entries, state.books, state.dict, state.exps, state.principles, state.time]);
+  const before = snap();
+  state.entries = arr(state.entries).filter(obj).map(e => {
+    if (!e.id) e.id = 'e' + Math.random().toString(36).slice(2, 10);
+    if (typeof e.createdAt !== 'number') e.createdAt = Number(e.createdAt) || Date.now();
+    if (typeof e.day !== 'string') e.day = dayKey(new Date(e.createdAt));
+    if (typeof e.title !== 'string') e.title = e.kind === 'morning' ? 'Утренняя подготовка' : e.kind === 'evening' ? 'Вечерний разбор' : 'Запись';
+    if (!Array.isArray(e.answers)) e.answers = [];
+    return e;
+  });
+  state.books = arr(state.books).filter(b => obj(b) && b.id).map(b => {
+    if (!obj(b.pos)) b.pos = { ch:0, frac:0 };
+    if (!Array.isArray(b.lens)) b.lens = [];
+    b.title = str(b.title || 'Без названия'); b.lang = b.lang === 'en' ? 'en' : 'ru';
+    if (b.pair && !obj(b.pair)) delete b.pair;
+    return b;
+  });
+  state.dict = arr(state.dict).filter(w => obj(w) && typeof w.term === 'string' && w.term.trim()).map(w => { if (!w.id) w.id = 'w' + Math.random().toString(36).slice(2, 9); if (typeof w.addedAt !== 'number') w.addedAt = Date.now(); return w; });
+  state.exps = arr(state.exps).filter(e => obj(e) && e.id && typeof e.title === 'string').map(e => { if (!obj(e.days)) e.days = {}; if (!['active','done','stopped'].includes(e.status)) e.status = 'active'; if (e.type !== 'do') e.type = 'avoid'; if (typeof e.createdAt !== 'number') e.createdAt = Date.now(); if (typeof e.startAt !== 'number') e.startAt = e.createdAt; return e; });
+  state.principles = arr(state.principles).map(str).filter(Boolean);
+  if (!state.principles.length) state.principles = DEFAULT_PRINCIPLES.slice();
+  const T = state.time = obj(state.time) ? state.time : Object.assign({}, TIME_DEFAULT);
+  T.sinks = arr(T.sinks).filter(x => obj(x) && x.id && typeof x.name === 'string');
+  T.log = obj(T.log) ? T.log : {};
+  Object.keys(T.log).forEach(k => { if (!obj(T.log[k])) delete T.log[k]; });
+  T.sessions = arr(T.sessions).filter(x => obj(x) && typeof x.start === 'number' && typeof x.end === 'number');
+  if (T.running && !(obj(T.running) && T.sinks.some(x => x.id === T.running.id) && typeof T.running.start === 'number')) T.running = null;
+  ['lifeYears', 'wakeHours', 'cut'].forEach(k => { if (typeof T[k] !== 'number' || !isFinite(T[k])) T[k] = TIME_DEFAULT[k]; });
+  if (typeof T.birth !== 'string') T.birth = '';
+  state.visits = obj(state.visits) ? state.visits : { days:[], best:0 };
+  state.visits.days = arr(state.visits.days).filter(d => typeof d === 'string');
+  state.home = obj(state.home) ? { order: arr(state.home.order).filter(x => typeof x === 'string'), off: arr(state.home.off).filter(x => typeof x === 'string') } : null;
+  state.sub = Object.assign({ practice:'ex', growth:'virtue', library:'teaching' }, obj(state.sub) ? Object.fromEntries(Object.entries(state.sub).filter(([, v]) => typeof v === 'string')) : {});
+  state.rprefs = Object.assign({ theme:'auto', size:19, lh:1.65, margin:'m', font:'serif', justify:false }, obj(state.rprefs) ? state.rprefs : {});
+  if (typeof state.rprefs.size !== 'number') state.rprefs.size = 19;
+  if (typeof state.rprefs.lh !== 'number') state.rprefs.lh = 1.65;
+  if (typeof state.theme !== 'string') state.theme = 'auto';
+  state.voyage = obj(state.voyage) ? { at: str(state.voyage.at), visited: arr(state.voyage.visited).filter(x => typeof x === 'string') } : { at:'portik', visited:[] };
+  return snap() !== before;
+}
+const DATA_FIXED = sanitizeState();
+
 const TABS = [
   {id:'today', label:'Сегодня', icon:'today'},
   {id:'practice', label:'Практика', icon:'list', segs:[['ex','Упражнения'],['exp','Эксперименты']]},
@@ -1991,7 +2038,7 @@ function widgetHtml(id){
 }
 function renderToday(){
   const conf = homeConf();
-  const parts = conf.order.filter(id => !conf.off.has(id)).map(widgetHtml).filter(Boolean);
+  const parts = conf.order.filter(id => !conf.off.has(id)).map(id => { try { return widgetHtml(id); } catch (e){ try { console.error('widget ' + id, e); } catch (x) {} return ''; } }).filter(Boolean);
   return '<header class="home-top"><div><div class="brand">Портик</div><div class="date">' + esc(fmtDate(new Date())) + '</div></div><button class="iconbtn" data-act="homeconf" aria-label="Настроить экран">' + ICON.gear + '</button></header>'
     + (parts.length ? '<div class="home-grid">' + parts.join('') + '</div>' : '<p class="empty">Все виджеты выключены. Нажми на шестеренку, чтобы вернуть.</p>');
 }
@@ -2717,6 +2764,14 @@ function renderMain(){
   paintMain();
 }
 function paintMain(){
+  try { paintMainUnsafe(); }
+  catch (e){
+    try { console.error(e); } catch (x) {}
+    const msg = String(e && e.message || e), stack = String(e && e.stack || msg).slice(0, 900);
+    $main.innerHTML = '<header class="page-head"><h1>Что-то сломалось</h1></header><div class="card"><p class="s-p">Этот экран не отрисовался. Данные на месте, остальные вкладки работают.</p><p class="fine" style="margin-top:10px;overflow-wrap:anywhere">' + esc(msg) + '</p><div class="drow" style="margin-top:12px"><button class="btn primary small" data-act="copyerr" data-id="' + esc(stack) + '">Скопировать ошибку</button><a class="btn ghost small" href="./?reset">Сбросить кэш</a></div></div>';
+  }
+}
+function paintMainUnsafe(){
   const tab = TABS.find(t => t.id === state.tab) || TABS[0];
   let body = '';
   if (tab.id === 'today') body = renderToday();
@@ -3035,6 +3090,7 @@ async function onAct(b){
     state.dict = state.dict.filter(x => x.id !== id); saveDict(); ds.open = null; ds.confirmDel = null; return afterDictChange();
   }
   if (act === 'seg'){ const [t, k] = id.split(':'); state.sub[t] = k; lsSet(LS_SUB, state.sub); renderMain(); window.scrollTo(0, 0); return; }
+  if (act === 'copyerr'){ const ok = await copyText(id + '\n' + navigator.userAgent); toast(ok ? 'Ошибка скопирована, кинь ее в чат' : 'Не получилось скопировать'); return; }
   if (act === 'homeconf') return pushSheet({ mode:'home', theme:'t-page' });
   if (act === 'theme'){ state.theme = id; lsSet(LS_THEME, id); applyTheme(); return renderSheet(true); }
   if (act === 'dock') return dock(id);
@@ -3211,9 +3267,11 @@ document.addEventListener('change', ev => {
 window.addEventListener('resize', () => { if (state.sheet && state.sheet.mode === 'time') drawLife(); });
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
+if (DATA_FIXED){ lsSet(LS_ENTRIES, state.entries); saveBooks(); saveDict(); saveExps(); lsSet(LS_TIME, state.time); }
 applyTheme();
 recordVisit();
 renderMain();
+window.__portikBooted = true;
 store.connect();
 startExpTicker();
 startLiveTicker();

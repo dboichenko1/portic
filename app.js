@@ -1182,7 +1182,9 @@ async function addBookFile(file){
     toast('Книга добавлена: ' + b.title);
   } catch(e){
     const m = String(e && e.message);
-    toast(m === 'drm' ? 'Книга защищена DRM, такую открыть нельзя' : m === 'old-browser' ? 'Обнови iOS: для EPUB нужна версия 16.4 или новее' : m === 'scan' ? 'В этом PDF нет текстового слоя, только картинки. Нужен PDF с текстом' : 'Не получилось открыть. Поддерживаются EPUB, FB2, TXT и PDF');
+    try { console.warn('book import', e); } catch (x) {}
+    const known = { drm:'Книга защищена DRM, такую открыть нельзя', 'old-browser':'Обнови iOS: для EPUB нужна версия 16.4 или новее', scan:'В этом PDF нет текстового слоя, только картинки. Нужен PDF с текстом', format:'Такой формат не поддерживается. Подойдут EPUB, FB2, TXT и PDF', empty:'В файле не нашлось текста' };
+    toast(known[m] || ('Не получилось открыть: ' + (m && m !== 'undefined' ? m.slice(0, 140) : 'неизвестная ошибка') + '. Скинь этот текст, разберусь'));
   }
   state.readBusy = false; state.readBusyText = ''; renderMain();
 }
@@ -1613,12 +1615,41 @@ if (window.matchMedia){ try { window.matchMedia('(prefers-color-scheme: dark)').
 
 /* ---------- reader: pdf ---------- */
 let pdfLibPromise = null;
+/* Safari не умеет перебирать ReadableStream через for await, а pdf.js так читает текст страниц. Дописываем. */
+function polyfillStreams(){
+  try {
+    if (typeof ReadableStream === 'undefined') return;
+    const proto = ReadableStream.prototype;
+    if (typeof proto[Symbol.asyncIterator] === 'function') return;
+    const iter = function (opts){
+      const reader = this.getReader(); const keep = !!(opts && opts.preventCancel);
+      return {
+        next(){ return reader.read().then(r => r.done ? (reader.releaseLock(), { done: true, value: undefined }) : r); },
+        return(v){ const p = keep ? Promise.resolve() : reader.cancel(v); return p.then(() => { reader.releaseLock(); return { done: true, value: v }; }); },
+        [Symbol.asyncIterator](){ return this; }
+      };
+    };
+    Object.defineProperty(proto, Symbol.asyncIterator, { value: iter, configurable: true, writable: true });
+    if (typeof proto.values !== 'function') Object.defineProperty(proto, 'values', { value: iter, configurable: true, writable: true });
+  } catch (e) {}
+}
+async function pageTextItems(page){
+  /* читаем поток сами через reader, без for await: так работает в любом Safari */
+  if (typeof page.streamTextContent === 'function'){
+    const reader = page.streamTextContent({ includeMarkedContent: false }).getReader();
+    const items = [];
+    for (;;){ const r = await reader.read(); if (r.done) break; if (r.value && r.value.items) items.push(...r.value.items); }
+    return items;
+  }
+  return (await page.getTextContent()).items;
+}
 function loadPdfJs(){
+  polyfillStreams();
   if (!pdfLibPromise) pdfLibPromise = import('./vendor/pdf.min.mjs').then(lib => { lib.GlobalWorkerOptions.workerSrc = new URL('vendor/pdf.worker.min.mjs', location.href).href; return lib; });
   return pdfLibPromise;
 }
 function median(arr){ if (!arr.length) return 0; const a = arr.slice().sort((x, y) => x - y); return a[Math.floor(a.length / 2)]; }
-function pdfPageParas(items){
+function pdfPageLines(items){
   const lines = [];
   for (const it of items){
     if (!it.str || !it.transform) continue;
@@ -1640,6 +1671,9 @@ function pdfPageParas(items){
     if (!s) continue;
     texts.push({ text: s, y: l.y, h: l.h, x0: l.parts[0].x, x1: endX });
   }
+  return texts;
+}
+function pdfBuildParas(texts){
   if (!texts.length) return [];
   const gaps = []; for (let i = 1; i < texts.length; i++){ const g = texts[i - 1].y - texts[i].y; if (g > 0) gaps.push(g); }
   const medGap = median(gaps) || 12;
@@ -1673,10 +1707,19 @@ async function parsePdf(buf, fname, onProgress){
   try {
     const outline = await doc.getOutline();
     if (outline && outline.length){
-      for (const it of outline.slice(0, 400)){
+      /* оглавление с вложенностью: части и главы внутри них, до трех уровней */
+      const flat = [];
+      const walk = (list, depth) => { for (const it of list || []){ if (flat.length >= 600) return; flat.push({ it }); if (depth < 3 && it.items && it.items.length) walk(it.items, depth + 1); } };
+      walk(outline, 1);
+      for (const { it } of flat){
         let dest = it.dest;
-        if (typeof dest === 'string') dest = await doc.getDestination(dest);
-        if (Array.isArray(dest) && dest[0] && typeof dest[0] === 'object'){ try { marks.push({ page: await doc.getPageIndex(dest[0]), title: String(it.title || '').replace(/\s+/g, ' ').trim() }); } catch(e){} }
+        try { if (typeof dest === 'string') dest = await doc.getDestination(dest); } catch(e){ dest = null; }
+        if (Array.isArray(dest) && dest[0] && typeof dest[0] === 'object'){
+          try {
+            const title = String(it.title || '').replace(/\s+/g, ' ').trim();
+            marks.push({ page: await doc.getPageIndex(dest[0]), title });
+          } catch(e){}
+        }
       }
       marks.sort((a, b) => a.page - b.page);
       marks = marks.filter((m, i) => i === 0 || m.page !== marks[i - 1].page);
@@ -1685,19 +1728,26 @@ async function parsePdf(buf, fname, onProgress){
   const pages = []; let chars = 0;
   for (let i = 1; i <= n; i++){
     const page = await doc.getPage(i);
-    const tc = await page.getTextContent();
-    const paras = pdfPageParas(tc.items);
-    chars += paras.join('').length;
-    pages.push(paras);
+    const lines = pdfPageLines(await pageTextItems(page));
+    chars += lines.reduce((n, l) => n + l.text.length, 0);
+    pages.push(lines);
     try { page.cleanup(); } catch(e){}
     if (onProgress && (i % 5 === 0 || i === n)) onProgress(i, n);
   }
   try { doc.destroy(); } catch(e){}
   if (chars < 150 * Math.min(n, 3)) throw new Error('scan');
-  /* running headers and footers: short paragraphs repeated at page edges */
+  /* колонтитулы: короткие строки у края страницы, которые повторяются без учета номеров страниц и пробелов */
+  const key = t => t.toLowerCase().replace(/[\d\s.,:;|·•\-]+/g, '');
   const edge = {};
-  pages.forEach(p => { [p[0], p[p.length - 1]].forEach(t => { if (t && t.length < 90) edge[t] = (edge[t] || 0) + 1; }); });
-  const junk = new Set(Object.keys(edge).filter(t => edge[t] >= 3));
+  pages.forEach(p => { const seen = new Set(); [p[0], p[1], p[p.length - 1], p[p.length - 2]].forEach(l => { if (l && l.text.length < 90){ const k = key(l.text); if (k && !seen.has(k)){ seen.add(k); edge[k] = (edge[k] || 0) + 1; } } }); });
+  const minRep = Math.max(3, Math.round(n * 0.08));
+  const junkKeys = new Set(Object.keys(edge).filter(k => edge[k] >= minRep));
+  for (let i = 0; i < pages.length; i++){
+    const p = pages[i];
+    const drop = new Set([0, 1, p.length - 1, p.length - 2].filter(j => j >= 0 && j < p.length && p[j].text.length < 90 && junkKeys.has(key(p[j].text))));
+    pages[i] = pdfBuildParas(p.filter((l, j) => !drop.has(j)));
+  }
+  const junk = new Set();
   const ranges = [];
   if (marks.length >= 2 && marks.length <= 300){
     if (marks[0].page > 0) ranges.push({ from: 0, to: marks[0].page - 1, title: 'Начало' });
@@ -1709,7 +1759,16 @@ async function parsePdf(buf, fname, onProgress){
   const chapters = [];
   for (const r of ranges){
     let html = '';
-    for (let p = r.from; p <= r.to; p++) html += pages[p].filter(t => !junk.has(t)).map(t => '<p>' + esc(t) + '</p>').join('');
+    /* абзац, разорванный переходом страницы, склеиваем обратно */
+    const acc = [];
+    for (let p = r.from; p <= r.to; p++){
+      pages[p].filter(t => !junk.has(t)).forEach((t, j) => {
+        const prev = acc[acc.length - 1];
+        if (j === 0 && prev && !/[.!?…:"»”)\]]$/.test(prev) && /^[a-zа-яё(“"«]/.test(t)) acc[acc.length - 1] = /[A-Za-zА-Яа-яёЁ]-$/.test(prev) ? prev.slice(0, -1) + t : prev + ' ' + t;
+        else acc.push(t);
+      });
+    }
+    html += acc.map(t => '<p>' + esc(t) + '</p>').join('');
     if (plainLen(html) > 0) chapters.push({ title: r.title, html });
   }
   if (!chapters.length) throw new Error('empty');

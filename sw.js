@@ -1,5 +1,5 @@
 /* Портик: офлайн-кэш. При смене шрифтов, иконок или pdf.js подними версию. */
-const CACHE = 'portik-v14';
+const CACHE = 'portik-v15';
 const ASSETS = ['./', './index.html', './app.css', './app.js', './theme.js', './manifest.webmanifest', './w.html', './w.js', './w.json',
   './fonts/forum.woff2', './fonts/literata.woff2', './fonts/literata-italic.woff2',
   './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png',

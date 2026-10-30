@@ -379,6 +379,7 @@ const ICON = {
   book:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 3.5h11a3 3 0 0 1 3 3V19H7a3 3 0 0 1-3-3Z" stroke-linejoin="round"/><path d="M4 16a3 3 0 0 1 3-3h11M8 7.5h6" stroke-linecap="round"/></svg>',
   dot:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="5"/></svg>',
   openbook:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M11 6.2C9 4.7 6.5 4.1 3.3 4.3v12.4c3.2-.2 5.7.4 7.7 1.9 2-1.5 4.5-2.1 7.7-1.9V4.3c-3.2-.2-5.7.4-7.7 1.9Z" stroke-linejoin="round"/><path d="M11 6.2v12.4"/></svg>',
+  pen:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 18l1-4L15 4l3 3L8 17z" stroke-linejoin="round"/><path d="M13 6l3 3"/></svg>',
   gear:'<svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="3"/><path d="M11 2.5v2.2M11 17.3v2.2M2.5 11h2.2M17.3 11h2.2M5 5l1.6 1.6M15.4 15.4 17 17M5 17l1.6-1.6M15.4 6.6 17 5" stroke-linecap="round"/></svg>'
 };
 
@@ -1908,7 +1909,7 @@ function recordVisit(){
 }
 function weekKey(ms){ const d = new Date(ms); const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow); return dayKey(d); }
 function xpData(){
-  const parts = { morning:0, evening:0, exercise:0, rating:0, exp:0, words:0, books:0, time:0, visits:0, voyage:0 };
+  const parts = { morning:0, evening:0, exercise:0, rating:0, note:0, exp:0, words:0, books:0, time:0, visits:0, voyage:0 };
   const weeks = {};
   const add = (k, v, ms) => { parts[k] += v; if (ms){ const w = weekKey(ms); weeks[w] = (weeks[w] || 0) + v; } };
   state.entries.forEach(e => {
@@ -1916,6 +1917,7 @@ function xpData(){
     else if (e.kind === 'evening') add('evening', 15, e.createdAt);
     else if (e.kind === 'exercise') add('exercise', 10, e.createdAt);
     else if (e.kind === 'rating') add('rating', 3, e.createdAt);
+    else if (e.kind === 'note') add('note', 5, e.createdAt);
   });
   state.exps.forEach(e => {
     Object.keys(e.days || {}).forEach(k => { if (e.days[k] === 'ok'){ const d = parseDate(k); add('exp', 5, d ? d.getTime() : 0); } });
@@ -1956,6 +1958,7 @@ const BADGES = [
   { id:'reader', n:'Читатель', d:'Дочитанная книга', ok: () => state.books.some(b => bookProgress(b) >= 99) },
   { id:'time7', n:'Учет времени', d:'7 дней отметок у пожирателей', ok: () => Object.keys(state.time.log || {}).filter(k => sumObj(state.time.log[k]) > 0).length >= 7 },
   { id:'mirror', n:'Самопознание', d:'4 самооценки добродетели', ok: () => state.entries.filter(e => e.kind === 'rating').length >= 4 },
+  { id:'thinker', n:'Мыслитель', d:'10 заметок в дневнике', ok: () => state.entries.filter(e => e.kind === 'note').length >= 10 },
   { id:'sailor', n:'Мореход', d:'10 пристаней на море философии', ok: () => voyage().visited.size >= 10 },
   { id:'circum', n:'Кругосветка', d:'Все пристани на море философии', ok: () => voyage().visited.size >= HARBORS.length - 1 },
   { id:'becker', n:'Следую фактам', d:'Все 6 упражнений Беккера', ok: () => EX.filter(x => x.src === 'becker').every(x => state.entries.some(e => e.exId === x.id)) },
@@ -1981,7 +1984,7 @@ function renderProgress(){
   const labels = wk.map((k, i) => (i % 2 === 0 || i === wk.length - 1) ? k.slice(8, 10) + '.' + k.slice(5, 7) : '');
   const xpVals = wk.map(k => x.weeks[k] || 0);
   const expVals = wk.map(k => state.exps.reduce((a, e) => a + Object.keys(e.days || {}).filter(d => e.days[d] === 'ok' && weekKey(parseDate(d).getTime()) === k).length, 0));
-  const names = { visits:'Дни в Портике', voyage:'Пристани на море философии', morning:'Утренние подготовки', evening:'Вечерние разборы', exercise:'Упражнения', rating:'Самооценки', exp:'Эксперименты', words:'Слова в словаре', books:'Чтение', time:'Учет времени' };
+  const names = { note:'Заметки и мысли', visits:'Дни в Портике', voyage:'Пристани на море философии', morning:'Утренние подготовки', evening:'Вечерние разборы', exercise:'Упражнения', rating:'Самооценки', exp:'Эксперименты', words:'Слова в словаре', books:'Чтение', time:'Учет времени' };
   const earned = BADGES.filter(b => b.ok()), locked = BADGES.filter(b => !b.ok());
   const vs = visitStreak(), best = Math.max(bestVisitStreak(), Number((state.visits || {}).best || 0)), ps = streak(), vd = visitDays().length;
   const lvlRows = state.showLevels ? LEVELS : LEVELS.filter((l, i) => Math.abs(i + 1 - x.level) <= 2 || i === LEVELS.length - 1);
@@ -2014,12 +2017,12 @@ function saveHome(conf){ state.home = { order: conf.order, off: [...conf.off] };
 function widgetHtml(id){
   const t = entriesOn(today());
   if (id === 'level') return levelCard();
-  if (id === 'quote'){ const q = quoteOfDay(); return '<div class="card"><figure class="inscription" style="margin:0"><p>' + esc(q.t) + '</p><cite>' + esc(q.r) + '</cite></figure></div>'; }
+  if (id === 'quote'){ const q = quoteOfDay(); return '<button class="card quote-tap" data-act="notequote" aria-label="Цитата дня, записать мысль"><figure class="inscription" style="margin:0"><p>' + esc(q.t) + '</p><cite>' + esc(q.r) + '</cite></figure><span class="tap-hint">' + ICON.pen + 'нажми, чтобы записать мысль</span></button>'; }
   if (id === 'rituals'){
     const mDone = t.some(e => e.kind === 'morning'), eDone = t.some(e => e.kind === 'evening');
     return '<section class="rituals" aria-label="Ритуалы дня"><button class="ritual morning" data-act="flow" data-id="morning">' + (mDone ? '<span class="done" role="img" aria-label="готово">✓</span>' : '') + ICON.sun + '<span><span class="r-title">Утро</span><small>Подготовка к дню</small></span></button><button class="ritual evening" data-act="flow" data-id="evening">' + (eDone ? '<span class="done" role="img" aria-label="готово">✓</span>' : '') + ICON.moon + '<span><span class="r-title">Вечер</span><small>Разбор дня</small></span></button></section>';
   }
-  if (id === 'exercise'){ const focus = todaysFocus(); const ex = focus || exerciseOfDay(); const done = t.some(e => e.kind === 'exercise' && e.exId === ex.id); return '<div class="card"><span class="card-k">' + (focus ? 'Упражнение, выбранное утром' : 'Упражнение дня') + (done ? ', сделано' : '') + '</span>' + exRow(ex) + '</div>'; }
+  if (id === 'exercise'){ const focus = todaysFocus(); const ex = focus || exerciseOfDay(); const done = t.some(e => e.kind === 'exercise' && e.exId === ex.id); return '<div class="card"><span class="card-k">' + (focus ? 'Упражнение, выбранное утром' : 'Упражнение дня') + (done ? ', сделано' : '') + '</span>' + exRow(ex) + noteBtn('noteex', ex.id) + '</div>'; }
   if (id === 'experiments'){
     const act = state.exps.filter(e => e.status === 'active');
     if (!act.length) return '<button class="card tap" data-act="gotoexp"><span class="card-k">Стоический эксперимент</span><span class="card-t">Начать отказ или привычку</span><span class="card-s">Таймер, календарь и опыт за каждый день в зачет</span></button>';
@@ -2503,7 +2506,7 @@ function harborBody(s){
   return '<p class="kicker">' + esc(isl ? isl.name : 'Пристань') + ', ' + esc(REL[h.rel].name) + '</p><h1 class="s-title">' + esc(h.name) + '</h1><p class="s-en">' + esc(h.era) + '</p>'
     + '<p class="s-p">' + esc(h.summary) + '</p>'
     + (h.who ? '<p class="s-h">Кто</p><p class="s-p" style="font-size:15px">' + esc(h.who) + '</p>' : '')
-    + (h.quote ? '<p class="s-quote">' + esc(h.quote.t) + '</p><p class="s-ref">' + esc(h.quote.r) + '</p>' : '')
+    + (h.quote ? '<p class="s-quote">' + esc(h.quote.t) + '</p><p class="s-ref" style="margin-bottom:8px">' + esc(h.quote.r) + '</p>' : '') + noteBtn('noteharbor', h.id)
     + ol('Основные тезисы', h.theses)
     + ((h.terms && h.terms.length) ? '<p class="s-h">Ключевые понятия</p><ul class="s-ul">' + h.terms.map(t => '<li><b>' + esc(t[0]) + '</b>: ' + esc(t[1]) + '</li>').join('') + '</ul><div class="drow" style="margin-top:8px"><button class="btn ghost small" data-act="harborquizlet" data-id="' + h.id + '">Понятия в Quizlet</button></div>' : '')
     + ul('Что читать', h.texts)
@@ -2520,6 +2523,38 @@ async function dock(id){
   if (ship && moved){ ship.style.transform = 'translate(' + h.x + 'px,' + (h.y - 24) + 'px)'; await new Promise(r => setTimeout(r, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 900)); }
   if (state.sheet && state.sheet.mode === 'harbor'){ state.sheet.id = id; renderSheet(); } else pushSheet({ mode:'harbor', theme:'t-page', id });
   if (fresh) toast('Новая пристань: ' + h.name + ', +3 XP');
+}
+
+/* ---------- notes: мысль по цитате, упражнению, учению или пристани ---------- */
+function noteSrcQuote(q, title){ return { type:'quote', title: title || 'Цитата дня', text: q.t, ref: q.r }; }
+function noteSrcEx(ex){ return { type:'exercise', id: ex.id, title: ex.title, text: ex.quote ? ex.quote.t : ex.idea, ref: ex.quote ? ex.quote.r : ex.who + ', ' + ex.ref }; }
+function noteSrcDoctrine(d){ return { type:'doctrine', id: d.id, title: d.title, text: d.quote ? d.quote.t : d.short, ref: d.quote ? d.quote.r : d.term }; }
+function noteSrcHarbor(h){ return { type:'harbor', id: h.id, title: h.name, text: h.quote ? h.quote.t : h.summary, ref: h.quote ? h.quote.r : h.era }; }
+function noteBtn(act, id){ return '<button class="notebtn" data-act="' + act + '"' + (id ? ' data-id="' + esc(id) + '"' : '') + '>' + ICON.pen + 'Записать мысль</button>'; }
+function openNote(src){ pushSheet({ mode:'note', theme:'t-page', src, text:'' }); }
+function noteTitle(src){
+  if (src.type === 'quote') return 'Мысль о цитате';
+  if (src.type === 'free') return 'Заметка';
+  return 'Мысль: ' + src.title;
+}
+function noteBody(s){
+  const src = s.src;
+  return '<p class="kicker">Заметка в дневник</p><h1 class="s-title">' + esc(src.type === 'free' ? 'Свободная заметка' : src.title) + '</h1>'
+    + (src.text ? '<div class="note-src"><p class="ns-t">' + esc(src.text) + '</p>' + (src.ref ? '<p class="ns-r">' + esc(src.ref) + '</p>' : '') + '</div>' : '')
+    + '<label class="s-q" for="note-text" style="display:block;font-size:clamp(21px,5.8vw,25px)">' + (src.type === 'free' ? 'Что на уме?' : 'Какая мысль пришла?') + '</label>'
+    + '<textarea id="note-text" class="s-area" placeholder="Пиши как есть: согласен, спорю, как это про меня, что сделаю">' + esc(s.text || '') + '</textarea>';
+}
+async function saveNote(){
+  const s = state.sheet; if (!s || s.mode !== 'note') return;
+  const el = document.getElementById('note-text'); const text = (el ? el.value : s.text || '').trim();
+  if (!text){ toast('Пустую заметку не сохраняю'); return; }
+  const src = s.src;
+  const entry = { id: uid(), kind:'note', title: noteTitle(src), src: { type: src.type, id: src.id || '', title: src.title || '', text: src.text || '', ref: src.ref || '' },
+    answers: [{ q: src.text ? src.text + (src.ref ? ' (' + src.ref + ')' : '') : 'Заметка', a: text }], createdAt: Date.now(), day: today() };
+  closeSheet();
+  await store.add(entry);
+  toast('Мысль записана в дневник');
+  renderMain();
 }
 
 /* ---------- render: main ---------- */
@@ -2632,14 +2667,18 @@ function renderTeaching(){
     + '<p class="fine">Цитаты древних даны в вольном переводе. Упражнения и идеи современных авторов пересказаны своими словами, в скобках указаны оригинальные названия. Где интерпретация моя, а не автора, это сказано прямо.</p>';
 }
 
-function entryIcon(e){ return e.kind === 'morning' ? ICON.sun : e.kind === 'evening' ? ICON.moon : e.kind === 'rating' ? ICON.radar : ICON.dot; }
+function entryIcon(e){ return e.kind === 'morning' ? ICON.sun : e.kind === 'evening' ? ICON.moon : e.kind === 'rating' ? ICON.radar : e.kind === 'note' ? ICON.pen : ICON.dot; }
 function journalInner(){
-  const s = streak(); const total = state.entries.length;
-  let html = ''
-    + '<div class="stats"><div><b>'+s+'</b><span>'+plural(s,'день подряд','дня подряд','дней подряд')+'</span></div><div><b>'+total+'</b><span>'+plural(total,'запись','записи','записей')+'</span></div></div>';
-  if (!total) return html + '<p class="empty">Пока пусто. Начни с утренней подготовки или любого упражнения: записи появятся здесь.</p>';
+  const s = streak(); const total = state.entries.length; const notes = state.entries.filter(e => e.kind === 'note').length;
+  const onlyNotes = state.journalFilter === 'notes';
+  let html = '<div class="lib-actions" style="margin-bottom:18px"><button class="btn primary" data-act="notefree">' + ICON.pen.replace('<svg', '<svg style="width:16px;height:16px;vertical-align:-3px;margin-right:6px"') + 'Новая заметка</button></div>'
+    + '<div class="stats"><div><b>'+s+'</b><span>'+plural(s,'день подряд','дня подряд','дней подряд')+'</span></div><div><b>'+total+'</b><span>'+plural(total,'запись','записи','записей')+'</span></div><div><b>'+notes+'</b><span>'+plural(notes,'заметка','заметки','заметок')+'</span></div></div>';
+  if (!total) return html + '<p class="empty">Пока пусто. Начни с утренней подготовки, упражнения или просто запиши мысль.</p>';
+  html += '<div class="chips" role="group" aria-label="Фильтр"><button class="chip" data-act="jfilter" data-id="all" aria-pressed="' + !onlyNotes + '">Все записи</button><button class="chip" data-act="jfilter" data-id="notes" aria-pressed="' + onlyNotes + '">Только заметки</button></div><div style="height:10px"></div>';
+  const list = onlyNotes ? state.entries.filter(e => e.kind === 'note') : state.entries;
+  if (!list.length) return html + '<p class="empty">Заметок пока нет. Нажми на цитату дня или на «Записать мысль» под упражнением.</p>';
   const byDay = {};
-  state.entries.slice().sort((a,b) => b.createdAt - a.createdAt).forEach(e => { (byDay[e.day] = byDay[e.day] || []).push(e); });
+  list.slice().sort((a,b) => b.createdAt - a.createdAt).forEach(e => { (byDay[e.day] = byDay[e.day] || []).push(e); });
   Object.keys(byDay).sort().reverse().forEach(day => {
     html += '<section class="day"><h3>'+esc(fmtDay(day))+'</h3><div>';
     byDay[day].forEach(e => {
@@ -2649,7 +2688,7 @@ function journalInner(){
         html += '<div class="entry-body">';
         const answers = (e.answers || []).filter(a => a.a && String(a.a).trim());
         if (!answers.length) html += '<p class="qa"><span class="q">Отмечено как выполненное, без заметок.</span></p>';
-        answers.forEach(a => { html += '<div class="qa"><div class="q">'+esc(a.q)+'</div><div class="a">'+esc(a.a)+'</div></div>'; });
+        answers.forEach(a => { html += '<div class="qa"><div class="q'+(e.kind === 'note' ? ' src' : '')+'">'+esc(a.q)+'</div><div class="a">'+esc(a.a)+'</div></div>'; });
         html += '<button class="del" data-act="del" data-id="'+esc(e.id)+'">'+(state.confirmDel===e.id?'Нажми еще раз, чтобы удалить':'Удалить запись')+'</button></div>';
       }
       html += '</div>';
@@ -2920,7 +2959,8 @@ function sheetBody(s){
     const body = introBody({ kicker: SRC[ex.src].title, title: ex.title, en: ex.en, quote: ex.quote, idea: ex.idea, list: ex.steps, ex })
       + '<p class="row-src">'+esc(ex.who)+', '+esc(ex.ref)+'</p>'
       + ((ex.sv && ex.sv.length) ? '<p class="s-h">Развивает</p><div>'+ex.sv.map(svChip).join('')+'</div>' : '')
-      + (ex.id === 'time' ? '<p style="margin-top:20px"><button class="btn ghost" data-act="time">Открыть трекер времени</button></p>' : '');
+      + (ex.id === 'time' ? '<p style="margin-top:20px"><button class="btn ghost" data-act="time">Открыть трекер времени</button></p>' : '')
+      + '<div style="margin-top:14px">' + noteBtn('noteex', ex.id) + '</div>';
     return { aria: ex.title, body, foot: '<button class="next" data-act="begin" data-id="'+ex.id+'">'+(ex.flow ? (ex.flow==='morning'?'Открыть утро':'Открыть вечер') : 'Начать')+'</button>' };
   }
   if (s.mode === 'virtue'){
@@ -2949,7 +2989,7 @@ function sheetBody(s){
     const d = DOCMAP[s.id];
     const body = '<p class="kicker">Учение</p><h1 class="s-title">'+esc(d.title)+'</h1><p class="s-en">'+esc(d.term)+'</p>'
       + '<p class="s-h">Как учили древние</p><p class="s-p">'+esc(d.ancient)+'</p>'
-      + '<p class="s-quote">'+esc(d.quote.t)+'</p><p class="s-ref">'+esc(d.quote.r)+'</p>'
+      + '<p class="s-quote">'+esc(d.quote.t)+'</p><p class="s-ref" style="margin-bottom:8px">'+esc(d.quote.r)+'</p>' + noteBtn('notedoc', d.id)
       + '<p class="s-h">Что отбросить</p><p class="s-drop">'+esc(d.drop)+'</p>'
       + '<p class="s-h">Как перечитать сегодня</p><p class="s-p">'+esc(d.modern)+'</p>'
       + '<p class="s-h">На что опирается</p><ul class="s-ul">'+d.science.map(x => '<li>'+esc(x)+'</li>').join('')+'</ul>'
@@ -2960,6 +3000,7 @@ function sheetBody(s){
   if (s.mode === 'time') return { aria:'Учет времени', body: timeBody(s) };
   if (s.mode === 'home') return { aria:'Настройки', body: homeConfBody(s) };
   if (s.mode === 'harbor') return { aria:'Пристань', body: harborBody(s) };
+  if (s.mode === 'note') return { aria:'Заметка', body: noteBody(s), foot:'<button class="next" data-act="notesave">Сохранить в дневник</button>' };
   if (s.mode === 'expnew') return { aria:'Новый эксперимент', body: expNewBody(s), foot:'<button class="next" data-act="expstart">Начать</button>' };
   if (s.mode === 'exp') return { aria:'Эксперимент', body: expDetailBody(s) };
   if (s.mode === 'dict') return { aria:'Словарь', body: dictBody(s) };
@@ -3091,6 +3132,13 @@ async function onAct(b){
   }
   if (act === 'seg'){ const [t, k] = id.split(':'); state.sub[t] = k; lsSet(LS_SUB, state.sub); renderMain(); window.scrollTo(0, 0); return; }
   if (act === 'copyerr'){ const ok = await copyText(id + '\n' + navigator.userAgent); toast(ok ? 'Ошибка скопирована, кинь ее в чат' : 'Не получилось скопировать'); return; }
+  if (act === 'notequote') return openNote(noteSrcQuote(quoteOfDay()));
+  if (act === 'noteex'){ const ex = EXMAP[id]; if (ex) openNote(noteSrcEx(ex)); return; }
+  if (act === 'notedoc'){ const d = DOCMAP[id]; if (d) openNote(noteSrcDoctrine(d)); return; }
+  if (act === 'noteharbor'){ const h = HMAP[id]; if (h) openNote(noteSrcHarbor(h)); return; }
+  if (act === 'notefree') return openNote({ type:'free', title:'', text:'', ref:'' });
+  if (act === 'notesave') return saveNote();
+  if (act === 'jfilter'){ state.journalFilter = id; return renderMain(); }
   if (act === 'homeconf') return pushSheet({ mode:'home', theme:'t-page' });
   if (act === 'theme'){ state.theme = id; lsSet(LS_THEME, id); applyTheme(); return renderSheet(true); }
   if (act === 'dock') return dock(id);
@@ -3241,6 +3289,7 @@ document.addEventListener('input', ev => {
     const n = document.getElementById('dsearch'); if (n){ n.focus(); try { n.setSelectionRange(pos, pos); } catch(e){} }
     return;
   }
+  if (el.id === 'note-text' && state.sheet && state.sheet.mode === 'note'){ state.sheet.text = el.value; return; }
   if (el.id === 'exp-title' && state.sheet){ state.sheet.title = el.value; return; }
   if (el.id === 'exp-why' && state.sheet){ state.sheet.why = el.value; return; }
   if (el.id === 'cut'){
@@ -3277,4 +3326,8 @@ startExpTicker();
 startLiveTicker();
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !visitDays().includes(today())){ recordVisit(); renderMain(); } });
 if (hash === 'morning' || hash === 'evening') setTimeout(() => startFlow(hash), 50);
+if (hash === 'note' || hash === 'note-ex') setTimeout(() => {
+  openNote(hash === 'note' ? noteSrcQuote(quoteOfDay()) : noteSrcEx(todaysFocus() || exerciseOfDay()));
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+}, 50);
 })();

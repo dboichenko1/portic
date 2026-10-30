@@ -12,7 +12,10 @@
 //   word       слово дня из твоего словаря
 //   principle  принцип дня из цитадели
 
-const SITE = 'https://ник.github.io/portik/'; // впиши адрес своего Портика, со слэшем в конце
+const SITE_RAW = 'https://ник.github.io/portik/'; // впиши адрес своего Портика
+/* берем только адрес сайта: без ?параметров, #якоря и имени файла вроде w.html или index.html */
+const SITE = SITE_RAW.trim().replace(/[?#].*$/, '').replace(/\/[^\/]*\.[a-z0-9]+$/i, '').replace(/\/+$/, '') + '/';
+const VERSION = 'виджет v5';
 
 const param = (args.widgetParameter || 'quote').trim();
 const parts = param.split(':');
@@ -50,12 +53,21 @@ async function fetchText(url){
 async function loadData(){
   const fm = FileManager.local();
   const path = fm.joinPath(fm.documentsDirectory(), 'portik-w.json');
-  try {
-    const d = JSON.parse(await fetchText(SITE + 'w.json'));
-    if (d && d.quotes && d.exs){ fm.writeString(path, JSON.stringify(d)); return d; }
-    throw new Error('w.json без данных');
-  } catch (e) { LAST_ERR = String(e.message || e); }
-  if (fm.fileExists(path)){ try { return JSON.parse(fm.readString(path)); } catch (e) {} }
+  if (/ник|nick|USERNAME/i.test(SITE)){ LAST_ERR = 'в SITE остался шаблон, впиши свой адрес'; }
+  else {
+    try {
+      const d = JSON.parse(await fetchText(SITE + 'w.json'));
+      if (d && d.quotes && d.exs){ fm.writeString(path, JSON.stringify(d)); return d; }
+      throw new Error('w.json без данных');
+    } catch (e) { LAST_ERR = 'w.json: ' + String(e.message || e); }
+    try {
+      const html = await fetchText(SITE + 'w.js');
+      const m = /const D = (\{[\s\S]*?\});\n/.exec(html);
+      if (m){ const d = JSON.parse(m[1]); if (d && d.quotes && d.exs){ fm.writeString(path, JSON.stringify(d)); return d; } }
+      LAST_ERR += '; w.js без данных';
+    } catch (e) { LAST_ERR += '; w.js: ' + String(e.message || e); }
+  }
+  if (fm.fileExists(path)){ try { const d = JSON.parse(fm.readString(path)); if (d && d.quotes){ return d; } } catch (e) {} }
   return null;
 }
 async function loadBackup(){
@@ -88,7 +100,12 @@ function big(t, size, lines){ const x = w.addText(t); x.font = serif(size); x.te
 function body(t, lines){ const x = w.addText(t); x.font = Font.regularSystemFont(13); x.textColor = ink; x.lineLimit = lines || 3; x.minimumScaleFactor = 0.8; return x; }
 function small(t, lines){ const x = w.addText(t); x.font = Font.regularSystemFont(12); x.textColor = stone; x.minimumScaleFactor = 0.7; if (lines) x.lineLimit = lines; return x; }
 function cite(t){ const c = w.addText(t); c.font = serifItalic(12); c.textColor = stone; c.lineLimit = 1; c.minimumScaleFactor = 0.7; return c; }
-function noData(msg){ kicker('Портик'); big('Нет данных', 18); small(msg, 3); if (LAST_ERR){ const er = w.addText(LAST_ERR); er.font = Font.regularSystemFont(11); er.textColor = accent; er.lineLimit = 3; } }
+function noData(msg){
+  kicker('Портик, ' + VERSION); big('Нет данных', 18); small(msg, 2);
+  const site = w.addText('SITE: ' + SITE); site.font = Font.regularSystemFont(11); site.textColor = stone; site.lineLimit = 1; site.minimumScaleFactor = 0.6;
+  if (LAST_ERR){ const er = w.addText(LAST_ERR); er.font = Font.regularSystemFont(11); er.textColor = accent; er.lineLimit = 4; er.minimumScaleFactor = 0.7; }
+  if (!config.runsInWidget) console.log('SITE=' + SITE + '\n' + LAST_ERR);
+}
 function bar(frac, color){
   const W = fam === 'small' ? 130 : 300, H = 6;
   const ctx = new DrawContext(); ctx.size = new Size(W, H); ctx.opaque = false; ctx.respectScreenScale = true;
@@ -103,12 +120,14 @@ const backupKinds = ['level', 'exp', 'today', 'word', 'principle'];
 
 if (dataKinds.includes(kind)){
   const D = await loadData();
-  if (!D){ noData('Проверь SITE в скрипте и интернет для первого запуска'); }
+  if (!D){ noData('Не удалось взять данные с сайта'); }
   else if (kind === 'quote'){
     const q = D.quotes[(dayIdx() * 7) % D.quotes.length];
+    w.url = SITE + '#note';
     kicker('Цитата дня'); big(q.t, fam === 'small' ? 15 : fam === 'medium' ? 18 : 24, fam === 'small' ? 6 : fam === 'medium' ? 5 : 10); w.addSpacer(8); cite(q.r);
   } else if (kind === 'exercise'){
     const e = D.exs[(dayIdx() * 5 + 3) % D.exs.length];
+    w.url = SITE + '#note-ex';
     kicker('Упражнение дня'); big(e.title, fam === 'small' ? 16 : 22, 2); small(e.who + ', ' + e.ref, 1);
     if (fam !== 'small'){ w.addSpacer(8); body(e.idea, fam === 'medium' ? 3 : 5); }
     if (fam === 'large'){ w.addSpacer(10); (e.steps || []).slice(0, 5).forEach((st, i) => { const t = w.addText((i + 1) + '. ' + st); t.font = Font.regularSystemFont(13); t.textColor = ink; t.lineLimit = 2; w.addSpacer(3); }); }

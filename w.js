@@ -16,11 +16,11 @@ const foot = '<p class="foot">Портик, экран с главной стр�
 if (t === 'quote'){
   const q = D.quotes[(dayIdx() * 7) % D.quotes.length];
   setName('Цитата');
-  app.innerHTML = '<p class="k">Цитата дня</p><p class="q">' + esc(q.t) + '</p><cite>' + esc(q.r) + '</cite>' + foot;
+  app.innerHTML = '<p class="k">Цитата дня</p><p class="q">' + esc(q.t) + '</p><cite>' + esc(q.r) + '</cite><p class="foot"><a href="./#note">Записать мысль в Портик</a></p>' + foot;
 } else if (t === 'exercise'){
   const e = D.exs[(dayIdx() * 5 + 3) % D.exs.length];
   setName('Упражнение');
-  app.innerHTML = '<p class="k">Упражнение дня</p><h1>' + esc(e.title) + '</h1><p class="m">' + esc(e.who) + ', ' + esc(e.ref) + '</p>' + (e.quote ? '<p class="q" style="font-size:clamp(22px,6vw,28px)">' + esc(e.quote.t) + '</p><cite style="margin-bottom:18px">' + esc(e.quote.r) + '</cite>' : '') + '<p>' + esc(e.idea) + '</p><ol>' + e.steps.map(x => '<li><span>' + esc(x) + '</span></li>').join('') + '</ol>' + foot;
+  app.innerHTML = '<p class="k">Упражнение дня</p><h1>' + esc(e.title) + '</h1><p class="m">' + esc(e.who) + ', ' + esc(e.ref) + '</p>' + (e.quote ? '<p class="q" style="font-size:clamp(22px,6vw,28px)">' + esc(e.quote.t) + '</p><cite style="margin-bottom:18px">' + esc(e.quote.r) + '</cite>' : '') + '<p>' + esc(e.idea) + '</p><ol>' + e.steps.map(x => '<li><span>' + esc(x) + '</span></li>').join('') + '</ol><p class="foot"><a href="./#note-ex">Записать мысль в Портик</a></p>' + foot;
 } else if (t === 'life' || t === 'memento'){
   const b = parseDate(Q.get('birth')), L = Math.max(40, Math.min(110, Number(Q.get('life')) || 80)), wake = Math.max(10, Math.min(20, Number(Q.get('wake')) || 16)), min = Math.max(0, Number(Q.get('min')) || 0);
   if (!b){ app.innerHTML = '<p class="err">В ссылке нет даты рождения. Открой этот экран из Портика, из настроек главной.</p>'; }
